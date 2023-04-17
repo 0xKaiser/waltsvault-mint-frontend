@@ -23,13 +23,24 @@ export const providerHandler = async () => {
 };
 
 export const getRavendaleTokens = async (address) => {
+    console.log('==> [enter] CONINT/getRavendaleTokens');
+
     try {
         const userBalance = await ravendaleContract.balanceOf(address).then((res) => {return res.toNumber()});
-        console.log('RBAL', userBalance);
+        const lockedTokens = await contract.getTokensLockedByAddr(address);
+        console.log('[log] getRavendaleTokens/userBalance: ', userBalance);
+        console.log('[log] getRavendaleTokens/lockedTokens: ', lockedTokens);
+
+        let userTokens = [];
+        
+        for(let i=0; i<lockedTokens.length; i++){
+            tokens.push({
+                tokenId: lockedTokens[i],
+                locked: true
+            });
+        }
 
         if (userBalance > 0) {
-            const lockedTokens = await contract.getTokensLockedByAddr(address);
-            
             const multicallContract = new Contract(config.ravendaleContractAddress, ravendaleAbi);
     
             let multicallArray = [];
@@ -40,23 +51,27 @@ export const getRavendaleTokens = async (address) => {
     
             const resultArray = await ethcallProvider.all(multicallArray);
     
-            let tokens = [], i = 0;
-            while (i < config.ravendaleSupply || tokens.length === userBalance - 1) {
+            let i = 0;
+            while (i < config.ravendaleSupply) {
                 if (address.toUpperCase() === resultArray[i].toUpperCase()) {
-                    tokens.push({
+                    userTokens.push({
                         tokenId: i,
-                        locked: lockedTokens.includes(i)
+                        locked: false
                     });
                 }
                 i++;
             }
-    
-            return tokens;
+            console.log('[output] getRavendaleTokens/userTokens: ', userTokens);
+            console.log('<== [exit] CONINT/getRavendaleTokens');
+            
+            return userTokens;
         } else {
-            return [];
+            console.log('<== [exit] CONINT/getRavendaleTokens');
+            return userTokens;
         }
     } catch (e) {
-        console.log(e);
+        console.log('[ERROR] CONINT/getRavendaleTokens: ',e);
+        console.log('<== [exit] CONINT/getRavendaleTokens');
         return [];
     }
 };
