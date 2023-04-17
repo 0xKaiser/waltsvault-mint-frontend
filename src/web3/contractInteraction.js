@@ -34,7 +34,7 @@ export const getRavendaleTokens = async (address) => {
         let userTokens = [];
         
         for(let i=0; i<lockedTokens.length; i++){
-            tokens.push({
+            userTokens.push({
                 tokenId: lockedTokens[i],
                 locked: true
             });
@@ -75,6 +75,17 @@ export const getRavendaleTokens = async (address) => {
         return [];
     }
 };
+
+export const getState = async () => {
+    const n = await contract.state();
+    switch (n) {
+        case 0: return "NOT_LIVE"
+        case 1: return "LIVE"
+        case 2: return "OVER"
+        case 3: return "REFUND"
+        case 4: return "RETURN"
+    }
+}
 
 export const getResSpotVL = async () => {
     const n = await contract.maxResPerSpot_VL();
@@ -121,6 +132,12 @@ export const placeOrder = async (price, tokensToLock, signature, amountVL, amoun
         amountFCFS, 
         {value: utils.parseEther(((amountVL + amountFCFS) * price).toFixed(5).toString())}
     );
+    await n.wait();
+    return n;
+}
+
+export const refund = async (signature) => {
+    const n = await contract.claimRefund(signature);
     await n.wait();
     return n;
 }

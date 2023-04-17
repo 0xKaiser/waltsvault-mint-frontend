@@ -5,10 +5,12 @@ import './app.scss';
 
 import Counter from './Components/Counter/Counter';
 
-import { getIsApproved, getMintPrice, getRavendaleTokens, getResSpotFCFS, getResSpotVL, getUsedResFCFS, getUsedResVL, placeOrder, providerHandler, setApproval } from './web3/contractInteraction';
+import { getIsApproved, getMintPrice, getRavendaleTokens, getResSpotFCFS, getResSpotVL, getState, getUsedResFCFS, getUsedResVL, placeOrder, providerHandler, setApproval } from './web3/contractInteraction';
 
 function App() {
   const { account, status, connect } = useMetaMask();
+
+  const [mintState, setMintState] = useState("NOT_LIVE");
   
   const [ravendaleTokens, setRavendaleTokens] = useState(null);
   const [isApproved, setIsApproved] = useState(false);
@@ -42,8 +44,6 @@ function App() {
     const maxReservations = totalAllocatedSpots * vaultData.reservationPerSpot;
 
     const maxMint = maxReservations - vaultData.usedReservations;
-    console.log(`X1: ${selectedRD} X2: ${lockedTokens} X3: ${vaultData.allocatedSpots} X4: ${vaultData.reservationPerSpot} X5: ${vaultData.usedReservations}`);
-    console.log(`Y1: ${totalAllocatedSpots} Y2: ${maxReservations}`)
 
     setMaxVaultMint(maxMint);
   }
@@ -89,6 +89,9 @@ function App() {
 
   const accountSetup = async () => {
     await providerHandler();
+
+    const state = await getState();
+    setMintState(state);
     
     // Get Ravendale Data
     const ravendale = await getRavendaleTokens(account);
@@ -147,7 +150,13 @@ function App() {
       </header>
       <div className="main">
         <div className="mint-container">
-
+        {mintState === 'NOT_LIVE' && 
+          <div className="error">
+            <h1>MINT NOT STARTED</h1>
+          </div>
+        }
+        
+        {mintState === 'LIVE' && <>
           <div className="ravendale-container">
             <h2>Ravendale</h2>
             <div className="token-grid">
@@ -204,6 +213,35 @@ function App() {
               {isApproved ? "MINT" : "APPROVE"}
             </button>
           </div>
+        </>}
+
+        {(mintState === 'OVER' || mintState === 'REFUND' || mintState === 'RETURN') && <>
+          <div className="claim-container">
+          <h2>Ravendale</h2>
+            <div className="token-grid">
+              {ravendaleTokens?.map((token) => {
+                return (
+                  <div 
+                    key={token.tokenId} 
+                    className="token" 
+                    id={token.locked ? "locked" : selectedTokens.includes(token.tokenId) ? "selected" : ""}
+                    onClick={() => {if (!token.locked) toggleSelect(token.tokenId)}}
+                  >
+                    #{token.tokenId}
+                  </div>
+              )})}
+            </div>
+            <button>CLAIM</button>
+          </div>
+
+          <div className="refund-container">
+            <h2>
+              Refund <br />
+              <span>Refund Amount: 1 ETH</span>
+            </h2>
+            <button>CLAIM</button>
+          </div>
+        </>}
 
         </div>
       </div>
