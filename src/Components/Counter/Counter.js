@@ -13,7 +13,7 @@ export default function Counter({ maxCount, count, setCount }) {
     }
     
     const handleCounterDecrease = () => {
-        if(count > 1) {
+        if(count > 0) {
             setCount(count - 1);
         }
         else

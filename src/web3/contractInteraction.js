@@ -33,7 +33,7 @@ export const getRavendaleTokens = async (address) => {
 
         let userTokens = [];
         
-        for(let i=0; i<lockedTokens.length; i++){
+        for(let i = 0; i < lockedTokens.length; i++){
             userTokens.push({
                 tokenId: lockedTokens[i],
                 locked: true
@@ -44,7 +44,7 @@ export const getRavendaleTokens = async (address) => {
             const multicallContract = new Contract(config.ravendaleContractAddress, ravendaleAbi);
     
             let multicallArray = [];
-            for (let i = 0; i < config.ravendaleSupply; i++) {
+            for (let i = 1; i <= config.ravendaleSupply; i++) {
                 const n = multicallContract.ownerOf(i);
                 multicallArray.push(n);
             }
@@ -83,17 +83,16 @@ export const getState = async () => {
         case 1: return "LIVE"
         case 2: return "OVER"
         case 3: return "REFUND"
-        case 4: return "RETURN"
     }
 }
 
 export const getResSpotVL = async () => {
-    const n = await contract.maxResPerSpot_VL();
+    const n = await contract.MAX_RES_PER_ADDR_VL();
     return n.toNumber();
 }
 
 export const getResSpotFCFS = async () => {
-    const n = await contract.maxResPerAddr_FCFS();
+    const n = await contract.MAX_RES_PER_ADDR_FCFS();
     return n.toNumber();
 }
 
@@ -108,12 +107,17 @@ export const getUsedResFCFS = async (address) => {
 }
 
 export const getMintPrice = async () => {
-    const n = await contract.resPrice();
-    return n.toNumber();
+    const n = await contract.PRICE_PER_RES();
+    return utils.formatEther(n.toString());
 }
 
 export const getIsApproved = async (address) => {
     const n = await ravendaleContract.isApprovedForAll(address, config.contractAddress);
+    return n;
+}
+
+export const getClaimedRefund = async (address) => {
+    const n = await contract.hasClaimedRefund(address);
     return n;
 }
 

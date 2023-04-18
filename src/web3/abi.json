@@ -1,5 +1,46 @@
 [
     {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_ravendaleAddr",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_designatedSigner",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "claimer",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "refundAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "ClaimRefund",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [],
+        "name": "CloseReservation",
+        "type": "event"
+    },
+    {
         "anonymous": false,
         "inputs": [
             {
@@ -10,6 +51,37 @@
             }
         ],
         "name": "Initialized",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "locker",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }
+        ],
+        "name": "LockRavendale",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [],
+        "name": "OpenRefundClaim",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [],
+        "name": "OpenReservation",
         "type": "event"
     },
     {
@@ -32,6 +104,189 @@
         "type": "event"
     },
     {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "receiver",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }
+        ],
+        "name": "ReleaseRavendale",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "reserver",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "reserveAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "Reserve",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "reserver",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "reserveAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "ReserveVaultList",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "FCFS_Reservers_List",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MAX_AMT_FOR_RES",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MAX_RES_PER_ADDR_FCFS",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MAX_RES_PER_ADDR_VL",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "PRICE_PER_RES",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "SIGNATURE_VALIDITY",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "VL_Reservers_List",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "waltsVault",
+                "type": "address"
+            },
+            {
+                "internalType": "address[]",
+                "name": "receivers",
+                "type": "address[]"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "tokenIds",
+                "type": "uint256[]"
+            }
+        ],
+        "name": "airdropReserveTokens",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "components": [
@@ -42,7 +297,7 @@
                     },
                     {
                         "internalType": "uint256",
-                        "name": "spotsReceived",
+                        "name": "amtAllocated",
                         "type": "uint256"
                     },
                     {
@@ -56,19 +311,12 @@
                         "type": "bytes"
                     }
                 ],
-                "internalType": "struct Signer.returnList",
-                "name": "signature",
+                "internalType": "struct Signer.refundInfo",
+                "name": "info",
                 "type": "tuple"
             }
         ],
         "name": "claimRefund",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "claimReturn",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -83,6 +331,51 @@
     {
         "inputs": [],
         "name": "designatedSigner",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getAllFCFS_Reservers",
+        "outputs": [
+            {
+                "internalType": "address[]",
+                "name": "",
+                "type": "address[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getAllVL_Reservers",
+        "outputs": [
+            {
+                "internalType": "address[]",
+                "name": "",
+                "type": "address[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "index",
+                "type": "uint256"
+            }
+        ],
+        "name": "getFCFS_ReserverByIndex",
         "outputs": [
             {
                 "internalType": "address",
@@ -118,12 +411,12 @@
                         "type": "bytes"
                     }
                 ],
-                "internalType": "struct Signer.allowList",
-                "name": "_allowList",
+                "internalType": "struct Signer.orderInfo",
+                "name": "_orderInfo",
                 "type": "tuple"
             }
         ],
-        "name": "getSignerForAllowList",
+        "name": "getSignerOrder",
         "outputs": [
             {
                 "internalType": "address",
@@ -145,7 +438,7 @@
                     },
                     {
                         "internalType": "uint256",
-                        "name": "spotsReceived",
+                        "name": "amtAllocated",
                         "type": "uint256"
                     },
                     {
@@ -159,12 +452,12 @@
                         "type": "bytes"
                     }
                 ],
-                "internalType": "struct Signer.returnList",
-                "name": "_returnList",
+                "internalType": "struct Signer.refundInfo",
+                "name": "_refundInfo",
                 "type": "tuple"
             }
         ],
-        "name": "getSignerForReturnList",
+        "name": "getSignerRefund",
         "outputs": [
             {
                 "internalType": "address",
@@ -179,7 +472,31 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_addr",
+                "name": "addr",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "index",
+                "type": "uint256"
+            }
+        ],
+        "name": "getTokenLockedByIndex",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "addr",
                 "type": "address"
             }
         ],
@@ -195,32 +512,8 @@
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_addr",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_index",
-                "type": "uint256"
-            }
-        ],
-        "name": "getTokensLockedByAddrAt",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [],
-        "name": "getTotalTokensLockedByUser",
+        "name": "getTotalFCFS_Reservers",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -235,24 +528,43 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_ravendaleAddr",
+                "name": "addr",
                 "type": "address"
             }
         ],
-        "name": "initialize",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
+        "name": "getTotalTokensLocked",
+        "outputs": [
             {
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
             }
         ],
-        "name": "lockerAddrOf",
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getTotalVL_Reservers",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "index",
+                "type": "uint256"
+            }
+        ],
+        "name": "getVL_ReserverByIndex",
         "outputs": [
             {
                 "internalType": "address",
@@ -264,26 +576,38 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "maxResPerAddr_FCFS",
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "hasClaimedRefund",
         "outputs": [
             {
-                "internalType": "uint256",
+                "internalType": "bool",
                 "name": "",
-                "type": "uint256"
+                "type": "bool"
             }
         ],
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "maxResPerSpot_VL",
-        "outputs": [
+        "inputs": [
             {
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
+            }
+        ],
+        "name": "lockerOf",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
             }
         ],
         "stateMutability": "view",
@@ -321,6 +645,13 @@
             }
         ],
         "stateMutability": "pure",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "openRefundClaim",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -373,8 +704,8 @@
                         "type": "bytes"
                     }
                 ],
-                "internalType": "struct Signer.allowList",
-                "name": "signature",
+                "internalType": "struct Signer.orderInfo",
+                "name": "info",
                 "type": "tuple"
             },
             {
@@ -398,12 +729,25 @@
         "name": "ravendale",
         "outputs": [
             {
-                "internalType": "contract IERC721Upgradeable",
+                "internalType": "contract IERC721",
                 "name": "",
                 "type": "address"
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address[]",
+                "name": "lockers",
+                "type": "address[]"
+            }
+        ],
+        "name": "releaseRavendale",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -452,26 +796,6 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "resPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "restockContractForRefund",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
                 "internalType": "address",
@@ -487,8 +811,26 @@
     {
         "inputs": [
             {
+                "internalType": "uint256",
+                "name": "maxResPerAddr_VL",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "maxResPerAddr_FCFS",
+                "type": "uint256"
+            }
+        ],
+        "name": "setMaxResPerAddr",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "address",
-                "name": "_ravendaleAddr",
+                "name": "ravendaleAddr",
                 "type": "address"
             }
         ],
@@ -501,7 +843,7 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_resPrice",
+                "name": "resPrice",
                 "type": "uint256"
             }
         ],
@@ -512,12 +854,12 @@
     },
     {
         "inputs": [],
-        "name": "signatureExpiryTime",
+        "name": "state",
         "outputs": [
             {
-                "internalType": "uint256",
+                "internalType": "enum WaltsVaultReservation.currentState",
                 "name": "",
-                "type": "uint256"
+                "type": "uint8"
             }
         ],
         "stateMutability": "view",
@@ -525,26 +867,12 @@
     },
     {
         "inputs": [],
-        "name": "startRefund",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "startReturn",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "state",
+        "name": "totalWithdrawal",
         "outputs": [
             {
-                "internalType": "enum ReserveForMint.currentstate",
+                "internalType": "uint256",
                 "name": "",
-                "type": "uint8"
+                "type": "uint256"
             }
         ],
         "stateMutability": "view",

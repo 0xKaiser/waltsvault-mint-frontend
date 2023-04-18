@@ -5,12 +5,15 @@ import './app.scss';
 
 import Counter from './Components/Counter/Counter';
 
-import { getIsApproved, getMintPrice, getRavendaleTokens, getResSpotFCFS, getResSpotVL, getState, getUsedResFCFS, getUsedResVL, placeOrder, providerHandler, setApproval } from './web3/contractInteraction';
+import { getClaimedRefund, getIsApproved, getMintPrice, getRavendaleTokens, getResSpotFCFS, getResSpotVL, getState, getUsedResFCFS, getUsedResVL, placeOrder, providerHandler, refund, setApproval } from './web3/contractInteraction';
+import { getOrderSignature, getRefundSignature } from './utils/backendApi';
 
 function App() {
   const { account, status, connect } = useMetaMask();
 
+  const [signature, setSignature] = useState({order: null, refund: null});
   const [mintState, setMintState] = useState("NOT_LIVE");
+  const [claimedRefund, setClaimedRefund] = useState(false);
   
   const [ravendaleTokens, setRavendaleTokens] = useState(null);
   const [isApproved, setIsApproved] = useState(false);
@@ -72,14 +75,22 @@ function App() {
         await placeOrder(
           mintPrice,
           selectedTokens, 
-          {signature: "NA"},
-          vaultAmount,
-          FCFSAmount
+          signature.order,
+          mintState === 'LIVE' ? vaultAmount : 0,
+          mintState === 'LIVE' ? FCFSAmount : 0
         )
       } catch (e) {
         console.log(e);
       }
     else console.log('Nothing to Mint!')
+  }
+
+  const refundHandler = async () => {
+    try {
+      await refund(signature.refund);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   useEffect(() => {
@@ -90,8 +101,23 @@ function App() {
   const accountSetup = async () => {
     await providerHandler();
 
+    // Get User Signature form API
+    const orderSignature = await getOrderSignature(account);
+    const refundSignature = await getRefundSignature(account);
+    console.log(orderSignature, refundSignature);
+    setSignature({
+      order: orderSignature,
+      refund: refundSignature
+    });
+
+    // Get Mint State
     const state = await getState();
     setMintState(state);
+
+    if (state === 'OVER' || state === 'REFUND') {
+      const refunded = await getClaimedRefund(account);
+      setClaimedRefund(refunded);
+    }
     
     // Get Ravendale Data
     const ravendale = await getRavendaleTokens(account);
@@ -108,7 +134,7 @@ function App() {
     // Get Vault List Mint Data
 
     // X3: TODO: API
-    const allocatedSpots = 2;
+    const allocatedSpots = 0;
     // X4
     const reservationPerSpot = await getResSpotVL(); 
     // X5
@@ -200,13 +226,13 @@ function App() {
 
           <div className="total-mints">
             <p>No of Mints {selectedTokens.length + vaultAmount + FCFSAmount}</p>
-            <h2>Price: {(vaultAmount + FCFSAmount) * mintPrice} ETH</h2>
+            <h2>Price: {((vaultAmount + FCFSAmount) * mintPrice).toFixed(2)} ETH</h2>
           </div>
 
           <div className="btn-container">
             <button
               onClick={() => {
-                if (isApproved) console.log('MINT');
+                if (isApproved) mintHandler();
                 else approvalHandler();
               }}
             >
@@ -215,7 +241,7 @@ function App() {
           </div>
         </>}
 
-        {(mintState === 'OVER' || mintState === 'REFUND' || mintState === 'RETURN') && <>
+        {(mintState === 'OVER' || mintState === 'REFUND') &&
           <div className="claim-container">
           <h2>Ravendale</h2>
             <div className="token-grid">
@@ -231,17 +257,22 @@ function App() {
                   </div>
               )})}
             </div>
-            <button>CLAIM</button>
+            {(ravendaleTokens && ravendaleTokens.length > 0) ? <button onClick={mintHandler}>CLAIM</button> : <p>No Ravendales Detected in This Wallet</p>}
           </div>
+        }
 
+        {mintState === 'REFUND' &&
           <div className="refund-container">
             <h2>
               Refund <br />
               <span>Refund Amount: 1 ETH</span>
             </h2>
-            <button>CLAIM</button>
+            {claimedRefund ? 
+              <p>Refund Claimed</p> :
+              <button onClick={refundHandler}>CLAIM</button>
+            }
           </div>
-        </>}
+        }
 
         </div>
       </div>
