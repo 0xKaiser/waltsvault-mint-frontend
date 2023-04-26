@@ -29,16 +29,6 @@ function App() {
     })();
   }, []);
 
-  // const projectId = configs.PROJECT_ID;
-  // const chains = [mainnet];
-  // const { provider } = configureChains(chains, [w3mProvider({ projectId })]);
-  // const wagmiClient = createClient({
-  //   autoConnect: true,
-  //   connectors: w3mConnectors({ version: 1, projectId, chains }),
-  //   provider,
-  // });
-  // const ethereumClient = new EthereumClient(wagmiClient, chains);
-
   const projectId = configs.PROJECT_ID;
   const chains = [mainnet, goerli];
   const { provider } = configureChains(chains, [w3mProvider({ projectId })]);
