@@ -1,0 +1,22 @@
+deploy-cohls-portfolio-frontend-production:
+  only:
+    - cohls-portfolio-frontend-production
+  tags:
+    - twl-monorepo-shell
+  stage: deploy
+  before_script:
+    - echo $PATH
+    - source ~/.bashrc
+    - echo $PATH
+    - npm -v
+    - yarn -v
+    - node -v
+    - aws --version
+    - find ./apps -mindepth 1 -not -path "./apps/cohls-portfolio-frontend*" -delete
+    - yarn install --pure-lockfile
+  script:
+    - echo "DEPLOY"
+    - yarn workspace cohls-portfolio-frontend deploy
+  environment:
+    name: production
+    url: https://cohlworld.xyz

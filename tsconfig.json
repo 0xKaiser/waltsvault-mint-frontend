@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["@types/node"],
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@twl/common/components/*": ["packages/common/*"]
+    }
+  },
+  "include": [".eslintrc.js", "packages/*"]
+}

@@ -1,0 +1,46 @@
+{
+  "name": "walts-vault-mystery-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@craco/craco": "7.0.0-alpha.8",
+    "@twl/common": "^0.1.0",
+    "@types/howler": "^2.2.7",
+    "@types/node": "^16.11.68",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
+    "gsap": "^3.10.4",
+    "howler": "^2.2.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "5.0.1",
+    "tsconfig-paths-webpack-plugin": "^4.0.1"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.2.0",
+    "ts-node": "^10.9.1"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "aws:s3:sync": "aws s3 sync --profile twl --delete build/ s3://walts-vault-mystery-bucket",
+    "aws:cloudfront:invalidate": "WS_MAX_ATTEMPTS=10 aws cloudfront create-invalidation --profile twl --distribution-id E1H5MIIJ637TZ --paths \"/*\" > /dev/null",
+    "deploy": "npm run build && npm run aws:s3:sync && npm run aws:cloudfront:invalidate",
+    "eject": "craco eject",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=0",
+    "lint:fix": "npm run lint -- --fix"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

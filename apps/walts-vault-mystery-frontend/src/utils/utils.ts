@@ -1,0 +1,35 @@
+export const isMobile = navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i);
+
+export const getLabel = () => ['V', 'i', 's', 'i', 't', ' ', 'D', 'i', 's', 'c', 'o', 'r', 'd'].join(''); // eslint-disable-line
+export const getLink = () =>
+  [
+    'h',
+    't',
+    't',
+    'p',
+    's',
+    ':',
+    '/',
+    '/',
+    'd',
+    'i',
+    's',
+    'c',
+    'o',
+    'r',
+    'd',
+    '.',
+    'g',
+    'g',
+    '/',
+    'w',
+    'a',
+    'l',
+    't',
+    's',
+    'v',
+    'a',
+    'u',
+    'l',
+    't',
+  ].join('');

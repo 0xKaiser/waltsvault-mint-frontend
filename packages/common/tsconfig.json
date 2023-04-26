@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json", //inherit from root tsconfig
+
+  // but override these:
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "rootDir": ".",
+    "outDir": "../../build/common",
+    "composite": true,
+    "baseUrl": ".",
+    "jsx": "react-jsx",
+    "typeRoots": ["types"],
+    "declarationMap": true
+  },
+  "include": ["global-constants", "rendering-engine", "shaders", "types", "utils", "hooks", "components"]
+}

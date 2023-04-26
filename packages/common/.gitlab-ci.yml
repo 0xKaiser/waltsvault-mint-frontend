@@ -1,0 +1,20 @@
+variables:
+  DOCKER_IMAGE: node:18.4.0-alpine3.16
+
+lint-common:
+  only:
+    refs:
+      - merge_requests
+  tags:
+    - lint-common
+  stage: lint-common
+  image: $DOCKER_IMAGE
+  script:
+    - node -v
+    - yarn -v
+    - ls
+    - yarn install --immutable-cache
+    - echo "Linting @twl/common package"
+    - yarn workspace @twl/common lint
+    # TODO: fix tsc command
+    # - yarn workspace passengers-frontend tsc

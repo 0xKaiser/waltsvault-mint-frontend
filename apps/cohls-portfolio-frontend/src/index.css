@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: 'OpenSansCondensed';
+    font-weight: 300;
+    src: local('OpenSansCondensed'), url(./assets/fonts/OpenSans_Condensed-Light.ttf) format('truetype');
+  }
+  @font-face {
+    font-family: 'OpenSansCondensed';
+    font-weight: 700;
+    src: local('OpenSansCondensed'), url(./assets/fonts/OpenSans_Condensed-Bold.ttf) format('truetype');
+  }
+}
+
+html {
+  background-color: #ffffff;
+}
+
+body {
+  background-color: #ffffff;
+  margin: 0;
+  font-family: OpenSansCondensed, 'Roboto', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

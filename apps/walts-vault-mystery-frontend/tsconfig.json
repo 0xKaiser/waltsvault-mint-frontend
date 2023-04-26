@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json", //inherit from root tsconfig
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    // "noEmit": true,
+    "jsx": "react-jsx",
+    "baseUrl": "src",
+    "composite": true,
+    "paths": { "common": ["../../common"] }
+  },
+  "include": ["src", "tailwind.config.js", "postcss.config.js", "constants/constants.ts", "craco.config.js"]
+}

@@ -1,0 +1,43 @@
+lint-passengers:
+  only:
+    - merge_requests
+  tags:
+    - twl-monorepo-shell
+  stage: lint
+  before_script:
+    - echo $PATH
+    - source ~/.bashrc
+    - echo $PATH
+    - npm -v
+    - yarn -v
+    - node -v
+    - aws --version
+    - find ./apps -mindepth 1 -not -path "./apps/passengers-frontend*" -delete
+    - yarn install --pure-lockfile
+  script:
+    - echo "LINT"
+    - yarn workspace passengers-frontend lint
+
+# ! commented beacuse build takes a lot of time on VPS, currently building from local machine
+# deploy-passengers-frontend-production:
+#   only:
+#     - passengers-frontend-production
+#   tags:
+#     - twl-monorepo-shell
+#   stage: deploy
+#   before_script:
+#     - echo $PATH
+#     - source ~/.bashrc
+#     - echo $PATH
+#     - npm -v
+#     - yarn -v
+#     - node -v
+#     - aws --version
+#     - find ./apps -mindepth 1 -not -path "./apps/passengers-frontend*" -delete
+#     - yarn install --pure-lockfile
+#   script:
+#     - echo "DEPLOY"
+#     - yarn workspace passengers-frontend deploy
+#   environment:
+#     name: production
+#     url: https://passengers.xyz

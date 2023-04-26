@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json", //inherit from root tsconfig
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "baseUrl": "src",
+    "composite": true,
+    "paths": { "common": ["../../common"] },
+    "resolveJsonModule": true
+  },
+  "include": ["src", "src/**/*.json", "tailwind.config.js", "postcss.config.js", "constants/constants.ts"]
+  // "references": [{ "path": "../../packages/common" }]
+}

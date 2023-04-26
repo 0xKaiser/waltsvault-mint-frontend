@@ -1,0 +1,97 @@
+@import 'index';
+
+.passengers {
+  h1 {
+    font-family: 'Aware';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 6.25rem;
+    line-height: 9.5rem;
+  }
+  h2 {
+    font-family: 'Aware';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 3.125rem;
+    line-height: 3.625rem;
+  }
+  h3 {
+    font-family: 'Aware';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 2.875rem;
+  }
+  .caption {
+    font-family: 'Aware';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+  }
+  .caption-small {
+    font-family: 'Aware';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  p {
+    font-family: 'HollowPoint';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1.75rem;
+    line-height: 1.625rem;
+  }
+  button {
+    font-family: 'HollowPoint';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 3.125rem;
+    line-height: 2.9735rem;
+  }
+  .numbers {
+    font-family: 'HollowPoint';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 3rem;
+    line-height: 2.8125rem;
+  }
+  .numbers-small {
+    font-family: 'HollowPoint';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 3rem;
+    line-height: 2.8125rem;
+  }
+  .description {
+    font-family: 'HollowPoint';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1.125rem;
+  }
+  .description-medium {
+    font-family: 'HollowPoint';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1.5rem;
+  }
+  .container {
+    display: flex;
+    flex: 1;
+    max-width: 720px;
+    padding: 60px;
+  }
+
+  .un-blur-image {
+    backface-visibility: hidden;
+    transform: translateZ(0) scale(1, 1);
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translateZ(0) scale(1, 1);
+    image-rendering: optimizeSpeed; /*                     */
+    image-rendering: -moz-crisp-edges; /* Firefox             */
+    image-rendering: -o-crisp-edges; /* Opera               */
+    image-rendering: -webkit-optimize-contrast; /* Chrome (and Safari) */
+    image-rendering: optimize-contrast; /* CSS3 Proposed       */
+    -ms-interpolation-mode: nearest-neighbor;
+  }
+}
