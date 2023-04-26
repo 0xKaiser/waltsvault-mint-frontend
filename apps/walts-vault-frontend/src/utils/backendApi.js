@@ -7,7 +7,6 @@ export const getOrderSignature = async (address) => {
     const { data } = await axios.post(BASE_URL + "/signer/order", { address: address });
     return data;
   } catch (err) {
-    console.log('err--',err);
     return false;
   }
 };

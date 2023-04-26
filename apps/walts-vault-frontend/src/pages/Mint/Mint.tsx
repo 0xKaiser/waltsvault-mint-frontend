@@ -135,8 +135,6 @@ export default function Home() {
 
     const totalAllocatedSpots = selectedRD + lockedTokens + vaultData.allocatedSpots;
     const maxReservations = totalAllocatedSpots * vaultData.reservationPerSpot;
-    console.log('maxReservations--',maxReservations);
-    console.log('vaultData.usedReservations--',vaultData.usedReservations);
     const maxMint = maxReservations - vaultData.usedReservations;
 
     setMaxVaultMint(maxMint);
@@ -176,20 +174,15 @@ export default function Home() {
 
   const approvalHandler = async () => {
     setStep1Status('loading');
-    console.log('!!!!!!!!!!!!!!!!');
     try {
       await setApproval();
-      console.log('^^^^^^^');
 
       const approval = await getIsApproved(account || '');
       setIsApproved(approval);
 
     } catch (e) {
       console.log('Approval Error', e);
-      // throw e;
-      console.log('##########');
     }
-    console.log('%%%%%');
     setStep1Status('initial');
   };
 
