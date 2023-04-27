@@ -1,9 +1,9 @@
 {
-    "contractAddress": "0xF30d71c7DDA7244842650F3D4D569eeb60C0960b",
-    "ravendaleContractAddress": "0xBE558404f27b4F525633957269F453E657e05B8A",
-    "ravendaleSupply": 20,
-    "chainID": 5,
-    "network": "Goerli Testnet",
+  "contractAddress": "0x8B52369Cb1F1D4D6045f1c54cbaef2c150fA95d1",
+  "ravendaleContractAddress": "0x0AdCc22167f9Bb8032091cA2571e75A29a219F54",
+  "ravendaleSupply": 20,
+  "chainID": 5,
+  "network": "Goerli Testnet",
   "PROJECT_ID": "906c2930e2f71964ff0b518b5036776f",
-    "rpcProvider": "https://eth-goerli.g.alchemy.com/v2/0aQmwMwZBjX6De1lQ30jUZXlGBpuuvrX"
+  "rpcProvider": "https://eth-goerli.g.alchemy.com/v2/0aQmwMwZBjX6De1lQ30jUZXlGBpuuvrX"
 }

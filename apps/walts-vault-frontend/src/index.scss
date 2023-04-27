@@ -52,14 +52,28 @@ button {
     font-size: 38px;
     line-height: 40px;
   }
-  .text{
+  .text {
     font-size: 24px !important;
+  }
+  .connect {
+    width: 210px !important;
+  }
+  .progress {
+    width: 135px !important;
   }
 }
 
 html,
 body {
   overscroll-behavior-y: none;
+}
+
+.hover {
+  transition: all 0.2s ease-in-out;
+}
+
+.hover:hover {
+  border: 2px solid rgba(0,0,0,0.5);
 }
 
 body {
@@ -71,6 +85,41 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+}
+
+.loading:after {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+  -webkit-animation: ellipsis steps(4, end) 1s infinite;
+  animation: ellipsis steps(4, end) 1s infinite;
+  content: "...";
+  width: 0px;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 0.45em;
+  }
+}
+
+@-webkit-keyframes ellipsis {
+  to {
+    width: 0.45em;
+  }
+}
+
+.progress {
+  width: 230px;
+}
+
+.connect {
+  width: 330px;
 }
 
 .cover {
@@ -148,6 +197,6 @@ body {
 
 /* Handle */
 .scrollbar-hide::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.35);
+  background: rgba(0, 0, 0, 0.35);
   border-radius: 20px;
 }

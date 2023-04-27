@@ -10,7 +10,7 @@ import {EthereumClient, w3mConnectors, w3mProvider} from '@web3modal/ethereum';
 import {Web3Modal} from '@web3modal/react';
 import {WagmiConfig, configureChains, createClient} from 'wagmi';
 import configs from './web3/config.json';
-
+import './index.css';
 function App() {
   const [isMintPeriod, setIsMintPeriod] = useState(false); // <=24H since mint started
   const [is24HPostMintPeriod, setIs24HPostMintPeriod] = useState(false); // >24H && <48H since mint started

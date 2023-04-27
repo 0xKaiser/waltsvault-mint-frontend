@@ -77,11 +77,12 @@ export default function Home() {
     );
   }
 
-  function renderLoading(subTitle: string) {
+  function renderLoading(subTitle: string, isLoading: boolean, width: string) {
     return (
-      <div className="flex flex-col md:flex-row items-center">
+      <div className="flex flex-col md:flex-row gap-4 items-center">
         <PaintbrushBlack/>
-        <h3 className="text-h3 ml-[5%] whitespace-nowrap">{subTitle}</h3>
+        <h3
+          className={`${width} text-h3 whitespace-nowrap ${isLoading && 'loading'}`}>{subTitle}</h3>
       </div>
     );
   }
@@ -301,9 +302,9 @@ export default function Home() {
     }
     if (step0Status === 'loading') {
       if (chain !== undefined && chain.id !== config.chainID) {
-        return renderLoading('Switch to Goerli Testnet');
+        return renderLoading('Switch to Goerli Testnet', false, 'chain');
       } else {
-        return renderLoading('Connecting Wallet...');
+        return renderLoading('Connecting Wallet', true, 'connect');
       }
     }
     return (
@@ -325,7 +326,7 @@ export default function Home() {
       return renderError(errorMessage, 'Please Try Again');
     }
     if (step1Status === 'loading') {
-      return renderLoading('In Progress...');
+      return renderLoading('In Progress', true, 'progress');
     }
     if (step1Status === 'completed') {
       return (
@@ -359,7 +360,8 @@ export default function Home() {
                   key={token.tokenId}
                   className={`
                       w-[43px] h-[43px] flex items-center justify-center cursor-pointer
-                      ${selectedTokens.includes(token.tokenId) ? 'border-2 border-black' : 'border border-gray-400'}
+                      ${selectedTokens.includes(token.tokenId) ? 'border-2 border-black' : 'border border-gray-400 '} 
+                      ${selectedTokens.includes(token.tokenId) || token.locked ? '' : 'hover'}
                     `}
                   onClick={() => {
                     if (!token.locked) toggleSelect(token.tokenId);
@@ -416,7 +418,8 @@ export default function Home() {
               if (isApproved) mintHandler();
               else approvalHandler();
             }}>
-              <h1 className="text-black text-[64px]">{isApproved ? 'Confirm' : 'Approve'}</h1>
+              <h1
+                className="text-black text-[64px]">{!isApproved && selectedTokens.length > 0 ? 'Approve' : 'Confirm'}</h1>
             </button>
             <EnterDecorationBlack className="rotate-180 w-[33px]"/>
           </div>
@@ -427,7 +430,8 @@ export default function Home() {
 
   return (
     <div className="h-screen w-screen flex items-center justify-center">
-      <img className="absolute h-[100vh] xl:h-[auto] m-auto min-w-[100vw] xl:min-w-[1200px]" src={EllipseGradient} alt="ellipse"/>
+      <img className="absolute h-[100vh] xl:h-[auto] m-auto min-w-[100vw] xl:min-w-[1200px]" src={EllipseGradient}
+           alt="ellipse"/>
       <video autoPlay className="w-full h-full object-cover object-center" loop muted playsInline>
         <source src={BG_VIDEO} type="video/mp4"/>
       </video>

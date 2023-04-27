@@ -31,6 +31,11 @@ export default function Home({ isMintPeriod, isPostMintPeriod }: { isMintPeriod:
 
   return (
     <div className="h-screen w-screen">
+      {!isMintPeriod && !isPostMintPeriod && (
+        <div className="cover flex justify-center items-center bg-[rgba(0,0,0,0.6)] z-20">
+          <h4 className="text-white loading w-[120px]">LOADING</h4>
+        </div>
+      )}
       <Menu isMintPeriod={isMintPeriod} isPostMintPeriod={isPostMintPeriod} />
       <Table appState={appState} lightOn={lightOn} toggleLight={toggleLight}>
         <AnimatedRoutes>

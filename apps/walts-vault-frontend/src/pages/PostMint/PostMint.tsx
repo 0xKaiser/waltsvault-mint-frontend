@@ -381,6 +381,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
                 className={`
                       w-[43px] h-[43px] flex items-center justify-center cursor-pointer
                       ${selectedTokens.includes(token.tokenId) ? 'border-2 border-black' : 'border border-gray-400'}
+                       ${selectedTokens.includes(token.tokenId) || token.locked ? '' : 'hover'}
                     `}
                 onClick={() => {
                   if (!token.locked) toggleSelect(token.tokenId);
