@@ -226,6 +226,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
   const accountSetup = async () => {
     setStep(0);
     setStep0Status('loading');
+    setStep3Status('initial');
     await providerHandler(data, provider);
 
     // Get User Signature form API
@@ -262,12 +263,13 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
     setAllocatedMerkels(refundSignature.amountAllocated);
 
     // Refund Amount
-    setRefundAmount((usedReservationsVL + usedReservationsFCFS) - refundSignature ? refundSignature.amountAllocated : (usedReservationsVL + usedReservationsFCFS));
+    setRefundAmount((usedReservationsVL + usedReservationsFCFS) - refundSignature.amountAllocated);
 
     // Get Mint Price
     const price = await getMintPrice();
     setMintPrice(price);
 
+    setSelectedTokens([])
     setStep(1);
     setStep0Status('completed');
   };
@@ -469,7 +471,8 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
 
   return (
     <div className="h-screen w-screen flex items-center justify-center">
-      <img className="absolute m-auto min-w-[100vw] xl:min-w-[1200px]" src={EllipseGradient} alt="ellipse"/>
+      <img className="absolute h-[100vh] xl:h-[auto] m-auto min-w-[100vw] xl:min-w-[1200px]" src={EllipseGradient}
+           alt="ellipse"/>
       <video autoPlay className="w-full h-full object-cover object-center" loop muted playsInline>
         <source src={BG_VIDEO} type="video/mp4"/>
       </video>

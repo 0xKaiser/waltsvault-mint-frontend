@@ -288,6 +288,9 @@ export default function Home() {
     const price = await getMintPrice();
     setMintPrice(price);
 
+    setVaultAmount(0)
+    setFCFSAmount(0)
+    setSelectedTokens([])
     setStep(1);
     setStep0Status('completed');
   };
@@ -424,7 +427,7 @@ export default function Home() {
 
   return (
     <div className="h-screen w-screen flex items-center justify-center">
-      <img className="absolute m-auto min-w-[100vw] xl:min-w-[1200px]" src={EllipseGradient} alt="ellipse"/>
+      <img className="absolute h-[100vh] xl:h-[auto] m-auto min-w-[100vw] xl:min-w-[1200px]" src={EllipseGradient} alt="ellipse"/>
       <video autoPlay className="w-full h-full object-cover object-center" loop muted playsInline>
         <source src={BG_VIDEO} type="video/mp4"/>
       </video>
