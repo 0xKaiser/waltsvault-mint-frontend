@@ -1,23 +1,21 @@
-import { ReactComponent as BrokenPencilBlack } from 'assets/icons/ic-broken-pencil-black.svg';
-import { ReactComponent as Delimeter } from 'assets/icons/ic-delimeter.svg';
-import { ReactComponent as EnterDecorationBlack } from 'assets/icons/ic-enter-decoration-black.svg';
-import { ReactComponent as PaintbrushBlack } from 'assets/icons/ic-paintbrush-black.svg';
-import { ReactComponent as Palette } from 'assets/icons/ic-palette.svg';
-import { ReactComponent as MintErrorBackdrop } from 'assets/images/backdrops/img-mint-error-backdrop.svg';
-import { ReactComponent as MintNumber2Backdrop } from 'assets/images/backdrops/img-mint-number-2-backdrop.svg';
-import { ReactComponent as MintNumberBackdrop } from 'assets/images/backdrops/img-mint-number-backdrop.svg';
-import { ReactComponent as MintTotalBackdrop } from 'assets/images/backdrops/img-mint-total-backdrop.svg';
-import { ReactComponent as MintTotalBigBackdrop } from 'assets/images/backdrops/img-mint-total-big-backdrop.svg';
+import {ReactComponent as BrokenPencilBlack} from 'assets/icons/ic-broken-pencil-black.svg';
+import {ReactComponent as Delimeter} from 'assets/icons/ic-delimeter.svg';
+import {ReactComponent as EnterDecorationBlack} from 'assets/icons/ic-enter-decoration-black.svg';
+import {ReactComponent as PaintbrushBlack} from 'assets/icons/ic-paintbrush-black.svg';
+import {ReactComponent as Palette} from 'assets/icons/ic-palette.svg';
+import {ReactComponent as MintErrorBackdrop} from 'assets/images/backdrops/img-mint-error-backdrop.svg';
+import {ReactComponent as MintTotalBackdrop} from 'assets/images/backdrops/img-mint-total-backdrop.svg';
+import {ReactComponent as MintTotalBigBackdrop} from 'assets/images/backdrops/img-mint-total-big-backdrop.svg';
 import EllipseGradient from 'assets/images/img-ellipse-gradient.png';
 import BG_VIDEO from 'assets/videos/WV-bg-team.mp4';
 import Footer from 'components/Footer';
 import Menu from 'components/Menu';
-import { useEffect, useState } from 'react';
-import { useMetaMask } from 'metamask-react';
+import {useEffect, useState} from 'react';
 import config from '../../web3/config.json';
+import {useAccount, useNetwork, useSwitchNetwork, useSigner, useProvider} from 'wagmi';
+import {useWeb3Modal} from '@web3modal/react';
 
 import {
-  getClaimedRefund,
   getIsApproved,
   getMintPrice,
   getRavendaleTokens,
@@ -28,14 +26,18 @@ import {
   getUsedResVL,
   placeOrder,
   providerHandler,
-  refund,
   setApproval,
 } from '../../web3/contractInteraction';
-import { getOrderSignature, getRefundSignature } from '../../utils/backendApi';
+import {getOrderSignature, getRefundSignature} from '../../utils/backendApi';
 import Counter from 'components/Counter/Counter';
 
 export default function Home() {
-  const { connect, account, status, chainId } = useMetaMask();
+  const {isConnected, address, status} = useAccount();
+  const {open} = useWeb3Modal();
+  const {chain} = useNetwork();
+  const {switchNetwork} = useSwitchNetwork()
+  const {data} = useSigner()
+  const provider = useProvider()
 
   // UI States
   const [step, setStep] = useState(0);
@@ -44,14 +46,14 @@ export default function Home() {
   const [errorMessage, setErrorMessage] = useState('Hmmm, something went wrong');
 
   // Mint Logic States
-  const [signature, setSignature] = useState({ order: [], refund: [] });
+  const [signature, setSignature] = useState({order: [], refund: []});
   const [mintState, setMintState] = useState('NOT_LIVE');
 
   const [ravendaleTokens, setRavendaleTokens] = useState<{ tokenId: number, locked: boolean }[]>([]);
   const [isApproved, setIsApproved] = useState(false);
   const [selectedTokens, setSelectedTokens] = useState<number[]>([]);
 
-  const [vaultData, setVaultData] = useState({ allocatedSpots: 0, reservationPerSpot: 0, usedReservations: 0 });
+  const [vaultData, setVaultData] = useState({allocatedSpots: 0, reservationPerSpot: 0, usedReservations: 0});
   const [vaultAmount, setVaultAmount] = useState(0);
   const [maxVaultMint, setMaxVaultMint] = useState(0);
 
@@ -62,13 +64,14 @@ export default function Home() {
 
   function renderError(title: string, subTitle: string) {
     return (
-      <div className='flex flex-col items-center'>
-        <BrokenPencilBlack />
-        <br />
-        <h3 className='text-[20px] md:text-[40px] whitespace-nowrap'>{title}</h3>
-        <div className='relative flex items-center text-center w-[800px]'>
-          <MintErrorBackdrop className='max-w-[100vw] mx-auto' />
-          <h2 className='absolute top-[5px] w-[100%] text-h2 text-white whitespace-nowrap mx-auto'>{subTitle}</h2>
+      <div className="flex flex-col items-center max-w-[90vw]">
+        <BrokenPencilBlack/>
+        <br/>
+        <h3 className="text-[20px] md:text-[40px] whitespace-nowrap">{title}</h3>
+        <div className="max-w-[100%] relative flex items-center text-center w-[800px]">
+          <MintErrorBackdrop className="max-w-[100vw] mx-auto"/>
+          <h2
+            className="absolute top-[5px] w-[100%] text-[30px] md:text-[64px] text-white whitespace-nowrap mx-auto">{subTitle}</h2>
         </div>
       </div>
     );
@@ -76,40 +79,34 @@ export default function Home() {
 
   function renderLoading(subTitle: string) {
     return (
-      <div className='flex items-center'>
-        <PaintbrushBlack />
-        <h3 className='text-h3 ml-[5%] whitespace-nowrap'>{subTitle}</h3>
+      <div className="flex flex-col md:flex-row items-center">
+        <PaintbrushBlack/>
+        <h3 className="text-h3 ml-[5%] whitespace-nowrap">{subTitle}</h3>
       </div>
     );
   }
 
   const handleChainChange = async () => {
     const chainID = config.chainID;
-    if (chainId !== null && chainId !== `0x${chainID}`) {
+    if (chain !== undefined && chain.id !== chainID) {
       setStep(0);
       setStep0Status('loading');
-      await window.ethereum
-        .request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: `0x${chainID}` }],
-        })
-        .then(() => {
-          setStep(1);
-          setStep0Status('completed');
-        });
+      await switchNetwork?.(chain.id)
     } else {
+      setStep(1);
+      setStep0Status('completed');
     }
   };
 
   useEffect(() => {
-    if (chainId) handleChainChange();
-  }, [chainId]);
+    if (chain) handleChainChange();
+  }, [chain]);
 
   async function connectWallet() {
     setStep0Status('loading');
 
     try {
-      await connect();
+      await open();
     } catch (e) {
       setStep0Status('error');
       setTimeout(() => {
@@ -136,7 +133,9 @@ export default function Home() {
     const totalAllocatedSpots = selectedRD + lockedTokens + vaultData.allocatedSpots;
     const maxReservations = totalAllocatedSpots * vaultData.reservationPerSpot;
     const maxMint = maxReservations - vaultData.usedReservations;
-
+    if (maxMint < vaultAmount) {
+      setVaultAmount(maxMint)
+    }
     setMaxVaultMint(maxMint);
   };
 
@@ -150,20 +149,20 @@ export default function Home() {
     setMintState(state);
 
     // Get Ravendale Data
-    const ravendale = await getRavendaleTokens(account || '');
+    const ravendale = await getRavendaleTokens(address || '');
     setRavendaleTokens(ravendale);
 
     // Get Vault List Mint Data
 
     // X5
-    const usedReservationsVL = await getUsedResVL(account || '');
-    setVaultData({ ...vaultData, usedReservations: usedReservationsVL });
+    const usedReservationsVL = await getUsedResVL(address || '');
+    setVaultData({...vaultData, usedReservations: usedReservationsVL});
 
     // Get FCFS Mint Data
     // G1
     const reservationPerUser = await getResSpotFCFS();
     // G2
-    const usedReservationsFCFS = await getUsedResFCFS(account || '');
+    const usedReservationsFCFS = await getUsedResFCFS(address || '');
 
     setMaxFCFSMint(reservationPerUser - usedReservationsFCFS);
 
@@ -177,7 +176,7 @@ export default function Home() {
     try {
       await setApproval();
 
-      const approval = await getIsApproved(account || '');
+      const approval = await getIsApproved(address || '');
       setIsApproved(approval);
 
     } catch (e) {
@@ -191,7 +190,7 @@ export default function Home() {
       try {
         setStep1Status('loading');
         await placeOrder(
-          account,
+          address,
           Number(mintPrice),
           selectedTokens,
           signature.order,
@@ -220,13 +219,13 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (account) accountSetup();
-  }, [account]);
+    if (address && data) accountSetup();
+  }, [address, data]);
 
-  // Show Connect Wallet Screen 
+  // Show Connect Wallet Screen
   // If user disconnects
   useEffect(() => {
-    if (status === 'notConnected' || status === 'unavailable') {
+    if (!isConnected) {
       setStep(0);
       setStep0Status('initial');
     }
@@ -235,11 +234,13 @@ export default function Home() {
   const accountSetup = async () => {
     setStep(0);
     setStep0Status('loading');
-    await providerHandler();
+    if (data) {
+      await providerHandler(data, provider);
+    }
 
     // Get User Signature form API
-    const orderSignature = await getOrderSignature(account);
-    const refundSignature = await getRefundSignature(account);
+    const orderSignature = await getOrderSignature(address);
+    const refundSignature = await getRefundSignature(address);
     setSignature({
       order: orderSignature.signature,
       refund: refundSignature.signature,
@@ -250,12 +251,12 @@ export default function Home() {
     setMintState(state);
 
     // Get Ravendale Data
-    const ravendale = await getRavendaleTokens(account || '');
+    const ravendale = await getRavendaleTokens(address || '');
     setRavendaleTokens(ravendale);
 
     // Check approval
     if (ravendale.length > 0) {
-      const approval = await getIsApproved(account || '');
+      const approval = await getIsApproved(address || '');
       setIsApproved(approval);
     } else {
       setIsApproved(true);
@@ -267,7 +268,7 @@ export default function Home() {
     // X4
     const reservationPerSpot = await getResSpotVL();
     // X5
-    const usedReservationsVL = await getUsedResVL(account || '');
+    const usedReservationsVL = await getUsedResVL(address || '');
 
     setVaultData({
       allocatedSpots: allocatedSpots,
@@ -279,7 +280,7 @@ export default function Home() {
     // G1
     const reservationPerUser = await getResSpotFCFS();
     // G2
-    const usedReservationsFCFS = await getUsedResFCFS(account || '');
+    const usedReservationsFCFS = await getUsedResFCFS(address || '');
 
     setMaxFCFSMint(reservationPerUser - usedReservationsFCFS);
 
@@ -296,18 +297,22 @@ export default function Home() {
       return renderError('Hmmm, something went wrong', 'Error: Unable to Connect');
     }
     if (step0Status === 'loading') {
-      return renderLoading('Connecting Wallet...');
+      if (chain !== undefined && chain.id !== config.chainID) {
+        return renderLoading('Switch to Goerli Testnet');
+      } else {
+        return renderLoading('Connecting Wallet...');
+      }
     }
     return (
       <>
-        <div className='flex items-center'>
-          <EnterDecorationBlack />
-          <button className='px-10' type='button' onClick={connectWallet}>
-            <h1 className='text-black'>Connect</h1>
+        <div className="flex items-center">
+          <EnterDecorationBlack/>
+          <button className="px-10" type="button" onClick={connectWallet}>
+            <h1 className="text-black">Connect</h1>
           </button>
-          <EnterDecorationBlack className='rotate-180' />
+          <EnterDecorationBlack className="rotate-180"/>
         </div>
-        <h3 className='text-h4 mt-[-2%]'>Follow Your Dreams</h3>
+        <h3 className="text-h4 mt-[-2%]">Follow Your Dreams</h3>
       </>
     );
   }
@@ -321,13 +326,13 @@ export default function Home() {
     }
     if (step1Status === 'completed') {
       return (
-        <div className='flex flex-col items-center max-w-[9vw]'>
-          <Palette />
-          <br />
-          <h3 className='text-[20px] md:text-[40px] whitespace-nowrap'>Congrats Dreamer!</h3>
-          <div className='relative flex items-center text-center w-[800px]'>
-            <MintTotalBigBackdrop className='mx-auto' />
-            <h2 className='absolute top-[5px] w-[100%] text-h2 text-white whitespace-nowrap mx-auto'>
+        <div className="flex flex-col items-center max-w-[90vw]">
+          <Palette/>
+          <br/>
+          <h3 className="text-[20px] md:text-[40px] whitespace-nowrap">Congrats Dreamer!</h3>
+          <div className="max-w-[100%] relative flex items-center text-center w-[800px]">
+            <MintTotalBigBackdrop className="mx-auto"/>
+            <h2 className="absolute top-[5px] w-[100%] text-[38px] md:text-[64px] text-white whitespace-nowrap mx-auto">
               Successfully Reserved
             </h2>
           </div>
@@ -335,16 +340,17 @@ export default function Home() {
       );
     }
     return (
-      <div className='flex flex-col select-none max-w-[90vw]'>
+      <div className="flex flex-col select-none max-w-[90vw]">
         {/* Ravendale Section */}
         {ravendaleTokens.length > 0 &&
         <>
-          <div className='flex flex-col md:flex-row justify-start md:justify-between'>
-            <div className='flex flex-col'>
-              <span className='text-[42px]'>Ravendale</span>
-              <span className='text-[20px] mt-[-16px]'>Select Tokens from Wallet</span>
+          <div className="flex flex-col md:flex-row justify-start md:justify-between">
+            <div className="flex flex-col">
+              <span className="text-[42px]">Ravendale</span>
+              <span className="text-[20px] mt-[-16px]">Select Tokens from Wallet</span>
             </div>
-            <div className='scrollbar-hide grid grid-cols-5 gap-4 md:self-center max-h-[86px] overflow-y-auto'>
+            <div
+              className="w-[280px] scrollbar-hide flex flex-wrap gap-[12px] md:self-center max-h-[102px] overflow-y-auto">
               {ravendaleTokens.map(token => (
                 <div
                   key={token.tokenId}
@@ -361,13 +367,13 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <Delimeter className='max-w-[100%] my-[16px]' />
+          <Delimeter className="max-w-[100%] my-[16px]"/>
         </>
         }
         <div className={`flex row items-center justify-between ${maxVaultMint <= 0 && 'disabled'}`}>
-          <div className='flex flex-col'>
-            <span className='text-[42px]'>Vault List</span>
-            <span className='text-[20px] mt-[-16px]'>available: {maxVaultMint}</span>
+          <div className="flex flex-col">
+            <span className="text-[42px]">Vault List</span>
+            <span className="text-[20px] mt-[-16px]">available: {maxVaultMint}</span>
           </div>
           <Counter
             style={0}
@@ -376,11 +382,11 @@ export default function Home() {
             setCount={setVaultAmount}
           />
         </div>
-        <Delimeter className='max-w-[100%] my-[16px]' />
+        <Delimeter className="max-w-[100%] my-[16px]"/>
         <div className={`flex row items-center justify-between ${maxFCFSMint <= 0 && 'disabled'}`}>
-          <div className='flex flex-col'>
-            <span className='text-[42px]'>FCFS</span>
-            <span className='text-[20px] mt-[-16px]'>available: {maxFCFSMint}</span>
+          <div className="flex flex-col">
+            <span className="text-[42px]">FCFS</span>
+            <span className="text-[20px] mt-[-16px]">available: {maxFCFSMint}</span>
           </div>
           <Counter
             style={1}
@@ -389,27 +395,27 @@ export default function Home() {
             setCount={setFCFSAmount}
           />
         </div>
-        <Delimeter className='max-w-[100%] my-[16px]' />
-        <div className='flex flex-col items-center mx-auto mt-[16px] relative'>
-          <MintTotalBackdrop className='absolute z-0' />
-          <div className='text-[20px] text-white leading-[47px] mx-auto mt-[-11px] z-10'>
+        <Delimeter className="max-w-[100%] my-[16px]"/>
+        <div className="flex flex-col items-center mx-auto mt-[16px] relative">
+          <MintTotalBackdrop className="absolute z-0"/>
+          <div className="text-[20px] text-white leading-[47px] mx-auto mt-[-11px] z-10">
             no. of mints: {selectedTokens.length + vaultAmount + FCFSAmount}
           </div>
           <div
-            className='text-[32px] text-white leading-[47px] mx-auto mt-[-27px] z-10'>Price: {((vaultAmount + FCFSAmount) * Number(mintPrice)).toFixed(2)} eth
+            className="text-[32px] text-white leading-[47px] mx-auto mt-[-27px] z-10">Price: {((vaultAmount + FCFSAmount) * Number(mintPrice)).toFixed(2)} eth
           </div>
         </div>
-        <div className='flex flex-col items-center'>
+        <div className="flex flex-col items-center">
           <div
             className={`flex flex-row items-center ${isApproved && (selectedTokens.length + vaultAmount + FCFSAmount) <= 0 && 'disabled'}`}>
-            <EnterDecorationBlack className='w-[33px]' />
-            <button className='px-3' type='button' onClick={() => {
+            <EnterDecorationBlack className="w-[33px]"/>
+            <button className="px-3" type="button" onClick={() => {
               if (isApproved) mintHandler();
               else approvalHandler();
             }}>
-              <h1 className='text-black text-[64px]'>{isApproved ? 'Confirm' : 'Approve'}</h1>
+              <h1 className="text-black text-[64px]">{isApproved ? 'Confirm' : 'Approve'}</h1>
             </button>
-            <EnterDecorationBlack className='rotate-180 w-[33px]' />
+            <EnterDecorationBlack className="rotate-180 w-[33px]"/>
           </div>
         </div>
       </div>
@@ -417,16 +423,16 @@ export default function Home() {
   }
 
   return (
-    <div className='h-screen w-screen flex items-center justify-center'>
-      <img className='absolute m-auto min-w-[100vw] xl:min-w-[1200px]' src={EllipseGradient} alt='ellipse' />
-      <video autoPlay className='w-full h-full object-cover object-center' loop muted playsInline>
-        <source src={BG_VIDEO} type='video/mp4' />
+    <div className="h-screen w-screen flex items-center justify-center">
+      <img className="absolute m-auto min-w-[100vw] xl:min-w-[1200px]" src={EllipseGradient} alt="ellipse"/>
+      <video autoPlay className="w-full h-full object-cover object-center" loop muted playsInline>
+        <source src={BG_VIDEO} type="video/mp4"/>
       </video>
-      <Menu />
-      <div className='cover flex flex-col justify-center items-center'>
+      <Menu/>
+      <div className="cover flex flex-col justify-center items-center">
         {step === 0 ? renderStep0() : renderStep1()}
       </div>
-      <Footer />
+      <Footer/>
     </div>
   );
 }

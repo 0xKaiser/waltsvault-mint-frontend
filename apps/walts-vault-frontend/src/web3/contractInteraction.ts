@@ -1,26 +1,21 @@
-import { ethers, utils } from 'ethers';
-import { Provider, Contract } from 'ethers-multicall';
+import {ethers, utils} from 'ethers';
+import {Provider, Contract} from 'ethers-multicall';
 
 import config from './config.json';
 import abi from './abi.json';
 import ravendaleAbi from './ravendaleAbi.json';
 
-let provider: ethers.providers.JsonRpcProvider, ethcallProvider: Provider, contract: ethers.Contract,
+let ethcallProvider: Provider, contract: ethers.Contract,
   ravendaleContract: ethers.Contract;
 
-export const providerHandler = async () => {
-  provider = new ethers.providers.Web3Provider(window.ethereum);
-  const account = await provider.listAccounts();
-  const address = account[0];
-  const signer = provider.getSigner();
-
+export const providerHandler = async (signer: any, provider: any) => {
   ethcallProvider = new Provider(provider);
   await ethcallProvider.init();
 
   contract = new ethers.Contract(config.contractAddress, abi, signer);
   ravendaleContract = new ethers.Contract(config.ravendaleContractAddress, ravendaleAbi, signer);
 
-  return address;
+  return true;
 };
 
 export const providerHandlerReadOnly = async () => {
@@ -163,7 +158,7 @@ export const placeOrder = async (account: any, price: number, tokensToLock: numb
     signer,
     amountVL,
     amountFCFS,
-    { value: utils.parseEther(((amountVL + amountFCFS) * price).toFixed(5).toString()) },
+    {value: utils.parseEther(((amountVL + amountFCFS) * price).toFixed(5).toString())},
   );
   await n.wait();
   return n;
