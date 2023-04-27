@@ -65,7 +65,7 @@ export default function Home() {
       <div className='flex flex-col items-center'>
         <BrokenPencilBlack />
         <br />
-        <h3 className='text-h2 whitespace-nowrap'>{title}</h3>
+        <h3 className='text-[20px] md:text-[40px] whitespace-nowrap'>{title}</h3>
         <div className='relative flex items-center text-center w-[800px]'>
           <MintErrorBackdrop className='max-w-[100vw] mx-auto' />
           <h2 className='absolute top-[5px] w-[100%] text-h2 text-white whitespace-nowrap mx-auto'>{subTitle}</h2>
@@ -321,10 +321,10 @@ export default function Home() {
     }
     if (step1Status === 'completed') {
       return (
-        <div className='flex flex-col items-center'>
+        <div className='flex flex-col items-center max-w-[9vw]'>
           <Palette />
           <br />
-          <h3 className='text-h2 whitespace-nowrap'>Congrats Dreamer!</h3>
+          <h3 className='text-[20px] md:text-[40px] whitespace-nowrap'>Congrats Dreamer!</h3>
           <div className='relative flex items-center text-center w-[800px]'>
             <MintTotalBigBackdrop className='mx-auto' />
             <h2 className='absolute top-[5px] w-[100%] text-h2 text-white whitespace-nowrap mx-auto'>
@@ -335,16 +335,16 @@ export default function Home() {
       );
     }
     return (
-      <div className='flex flex-col select-none'>
+      <div className='flex flex-col select-none max-w-[90vw]'>
         {/* Ravendale Section */}
         {ravendaleTokens.length > 0 &&
         <>
-          <div className='flex row justify-between'>
+          <div className='flex flex-col md:flex-row justify-start md:justify-between'>
             <div className='flex flex-col'>
               <span className='text-[42px]'>Ravendale</span>
               <span className='text-[20px] mt-[-16px]'>Select Tokens from Wallet</span>
             </div>
-            <div className='scrollbar-hide grid grid-cols-5 gap-4 self-center max-h-[86px] overflow-y-auto'>
+            <div className='scrollbar-hide grid grid-cols-5 gap-4 md:self-center max-h-[86px] overflow-y-auto'>
               {ravendaleTokens.map(token => (
                 <div
                   key={token.tokenId}
@@ -361,7 +361,7 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <Delimeter className='my-[16px]' />
+          <Delimeter className='max-w-[100%] my-[16px]' />
         </>
         }
         <div className={`flex row items-center justify-between ${maxVaultMint <= 0 && 'disabled'}`}>
@@ -376,7 +376,7 @@ export default function Home() {
             setCount={setVaultAmount}
           />
         </div>
-        <Delimeter className='my-[16px]' />
+        <Delimeter className='max-w-[100%] my-[16px]' />
         <div className={`flex row items-center justify-between ${maxFCFSMint <= 0 && 'disabled'}`}>
           <div className='flex flex-col'>
             <span className='text-[42px]'>FCFS</span>
@@ -389,7 +389,7 @@ export default function Home() {
             setCount={setFCFSAmount}
           />
         </div>
-        <Delimeter className='my-[16px]' />
+        <Delimeter className='max-w-[100%] my-[16px]' />
         <div className='flex flex-col items-center mx-auto mt-[16px] relative'>
           <MintTotalBackdrop className='absolute z-0' />
           <div className='text-[20px] text-white leading-[47px] mx-auto mt-[-11px] z-10'>
@@ -418,7 +418,7 @@ export default function Home() {
 
   return (
     <div className='h-screen w-screen flex items-center justify-center'>
-      <img className='absolute m-auto min-w-[1200px]' src={EllipseGradient} alt='ellipse' />
+      <img className='absolute m-auto min-w-[100vw] xl:min-w-[1200px]' src={EllipseGradient} alt='ellipse' />
       <video autoPlay className='w-full h-full object-cover object-center' loop muted playsInline>
         <source src={BG_VIDEO} type='video/mp4' />
       </video>

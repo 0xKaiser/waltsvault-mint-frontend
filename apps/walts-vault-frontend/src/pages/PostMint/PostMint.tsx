@@ -87,13 +87,13 @@ export default function Home({ is24HPostMintPeriod }: { is24HPostMintPeriod: boo
 
   function renderError(title: string, subTitle: string) {
     return (
-      <div className='flex flex-col items-center'>
+      <div className='flex flex-col items-center max-w-[90vw]'>
         <BrokenPencilBlack />
         <br />
-        {title.length > 0 && <h3 className='text-h2 whitespace-nowrap'>{title}</h3>}
-        <div className='relative flex items-center text-center w-[800px]'>
-          <MintErrorBackdrop className='max-w-[100vw] mx-auto' />
-          <h2 className='absolute top-[5px] w-[100%] text-h2 text-white whitespace-nowrap mx-auto'>{subTitle}</h2>
+        {title.length > 0 && <h3 className='text-[20px] md:text-[40px] whitespace-nowrap'>{title}</h3>}
+        <div className='max-w-[100%] relative flex items-center text-center w-[800px]'>
+          <MintErrorBackdrop className='max-w-[100%] mx-auto' />
+          <h2 className='absolute top-[5px] w-[100%] text-[30px] md:text-[64px] text-white whitespace-nowrap mx-auto'>{subTitle}</h2>
         </div>
       </div>
     );
@@ -101,7 +101,7 @@ export default function Home({ is24HPostMintPeriod }: { is24HPostMintPeriod: boo
 
   function renderLoading(subTitle: string) {
     return (
-      <div className='flex items-center'>
+      <div className='flex flex-col md:flex-row items-center'>
         <PaintbrushBlack />
         <h3 className='text-h3 ml-[5%] whitespace-nowrap'>{subTitle}</h3>
       </div>
@@ -110,13 +110,13 @@ export default function Home({ is24HPostMintPeriod }: { is24HPostMintPeriod: boo
 
   function render24HPostMint() {
     return (
-      <div className='flex flex-col items-center'>
+      <div className='flex flex-col items-center max-w-[90vw]'>
         <Palette />
         <br />
-        <h3 className='text-h2 whitespace-nowrap'>Mint Has Successfully Completed</h3>
-        <div className='relative flex items-center text-center w-[800px]'>
-          <MintTotalBigBackdrop className='w-[750px] mx-auto' />
-          <h2 className='absolute top-[5px] w-[100%] text-[64px] text-white whitespace-nowrap mx-auto'>
+        <h3 className='text-[20px] md:text-[40px] whitespace-nowrap'>Mint Has Successfully Completed</h3>
+        <div className='max-w-[100%] relative flex items-center text-center w-[800px]'>
+          <MintTotalBigBackdrop className='max-w-[100%] w-[750px] mx-auto' />
+          <h2 className='absolute top-[5px] w-[100%] text-[34px] md:text-[64px] text-white whitespace-nowrap mx-auto'>
             Allocation is Being Assigned
           </h2>
         </div>
@@ -303,7 +303,7 @@ export default function Home({ is24HPostMintPeriod }: { is24HPostMintPeriod: boo
   function renderStep1() {
     return (
       <>
-        <div className='flex flex-row items-center'>
+        <div className='flex flex-col md:flex-row items-center max-w-[90vw]'>
           <div className='flex items-center'>
             <EnterDecorationBlack />
             <button className='px-10' type='button' onClick={() => {
@@ -314,7 +314,7 @@ export default function Home({ is24HPostMintPeriod }: { is24HPostMintPeriod: boo
             </button>
             <EnterDecorationBlack className='rotate-180' />
           </div>
-          <span className='text-[64px] mx-[32px]'>or</span>
+          <span className='text-[38px] md:text-[64px] mx-[32px]'>or</span>
           <div className='flex items-center'>
             <EnterDecorationBlack />
             <button className='px-10' type='button' onClick={() => {
@@ -326,7 +326,7 @@ export default function Home({ is24HPostMintPeriod }: { is24HPostMintPeriod: boo
             <EnterDecorationBlack className='rotate-180' />
           </div>
         </div>
-        <span className='text-[38px] leading-10 mx-[32px]  items-center text-center'>
+        <span className='text-[20px] md:text-[38px] leading-10 mx-[32px]  items-center text-center'>
           Ravendale Keepers can claim their Free Merkel
           <br />
           or
@@ -355,13 +355,13 @@ export default function Home({ is24HPostMintPeriod }: { is24HPostMintPeriod: boo
     }
     if (step2Status === 'completed') {
       return (
-        <div className='flex flex-col items-center'>
+        <div className='flex flex-col items-center max-w-[90vw]'>
           <Palette />
           <br />
-          <h3 className='text-h2 whitespace-nowrap'>Congrats Dreamer!</h3>
-          <div className='relative flex items-center text-center w-[800px]'>
+          <h3 className='text-[20px] md:text-[40px] whitespace-nowrap'>Congrats Dreamer!</h3>
+          <div className='max-w-[100%] relative flex items-center text-center w-[800px]'>
             <MintTotalBigBackdrop className='mx-auto' />
-            <h2 className='absolute top-[5px] w-[100%] text-h2 text-white whitespace-nowrap mx-auto'>
+            <h2 className='absolute top-[5px] w-[100%] text-[38px] md:text-[64px] text-white whitespace-nowrap mx-auto'>
               Successfully Claimed
             </h2>
           </div>
@@ -369,13 +369,13 @@ export default function Home({ is24HPostMintPeriod }: { is24HPostMintPeriod: boo
       );
     }
     return (
-      <div className='flex flex-col select-none'>
-        <div className='flex row justify-between'>
+      <div className='flex flex-col select-none max-w-[90vw]'>
+        <div className='flex flex-col md:flex-row justify-start md:justify-between'>
           <div className='flex flex-col'>
             <span className='text-[42px]'>Ravendale</span>
             <span className='text-[20px] mt-[-16px]'>Select Tokens from Wallet</span>
           </div>
-          <div className='scrollbar-hide grid grid-cols-5 gap-4 self-center max-h-[86px] overflow-y-auto'>
+          <div className='scrollbar-hide grid grid-cols-5 gap-4 md:self-center max-h-[86px] overflow-y-auto'>
             {ravendaleTokens.map(token => (
               <div
                 key={token.tokenId}
@@ -392,12 +392,9 @@ export default function Home({ is24HPostMintPeriod }: { is24HPostMintPeriod: boo
             ))}
           </div>
         </div>
-        <Delimeter className='my-[16px]' />
+        <Delimeter className='max-w-[100%] my-[16px]' />
         <div className='flex flex-col items-center mx-auto mt-[16px] relative'>
           <MintTotalBackdrop className='absolute z-0' />
-          {/* <div className="text-[20px] text-white leading-[47px] mx-auto mt-[-11px] z-10">
-            no. of mints: {selectedTokens.length}
-          </div> */}
           <div className='text-[32px] text-white leading-[47px] mx-auto z-10'>no. of
             mints: {selectedTokens.length}</div>
         </div>
@@ -429,10 +426,10 @@ export default function Home({ is24HPostMintPeriod }: { is24HPostMintPeriod: boo
     }
     if (step3Status === 'completed') {
       return (
-        <div className='flex flex-col items-center'>
+        <div className='flex flex-col items-center max-w-[90vw]'>
           <Palette />
           <br />
-          <h3 className='text-h2 whitespace-nowrap'>The Dream doesn’t end here</h3>
+          <h3 className='text-[20px] md:text-[40px] whitespace-nowrap'>The Dream doesn’t end here</h3>
           <div className='relative flex items-center text-center w-[800px]'>
             <MintTotalBigBackdrop className='mx-auto' />
             <h2 className='absolute top-[5px] w-[100%] text-h2 text-white whitespace-nowrap mx-auto'>
@@ -443,7 +440,7 @@ export default function Home({ is24HPostMintPeriod }: { is24HPostMintPeriod: boo
       );
     }
     return (
-      <div className='flex flex-col select-none'>
+      <div className='flex flex-col select-none max-w-[90vw]'>
         <h3 className='text-h2 whitespace-nowrap'>Allocated Merkels: {allocatedMerkels}</h3>
         <div className='flex flex-col items-center mx-auto mt-[16px] relative'>
           <MintTotalBackdrop className='absolute z-0' />
@@ -475,7 +472,7 @@ export default function Home({ is24HPostMintPeriod }: { is24HPostMintPeriod: boo
 
   return (
     <div className='h-screen w-screen flex items-center justify-center'>
-      <img className='absolute m-auto min-w-[1200px]' src={EllipseGradient} alt='ellipse' />
+      <img className='absolute m-auto min-w-[100vw] xl:min-w-[1200px]' src={EllipseGradient} alt='ellipse' />
       <video autoPlay className='w-full h-full object-cover object-center' loop muted playsInline>
         <source src={BG_VIDEO} type='video/mp4' />
       </video>
