@@ -42,9 +42,12 @@ export default function Menu({
         PAGE_ROUTE_WITH_MINT.push({path: '/post-mint', name: 'Claim / Refund', backdrop: VwBackdrop});
       }
     }
+    const handleCheckPath=(path:any)=>{
+      console.log('path----',path)
+    }
 
     return Object.values(PAGE_ROUTE_WITH_MINT).map(({path, name, backdrop: Backdrop}) => (
-      <Link to={path} key={path} className="relative flex justify-center items-center z-100 mx-[-8px] link">
+      <Link onClick={()=>handleCheckPath(path)} to={path} key={path} className="relative flex justify-center items-center z-100 mx-[-8px] link">
         {Backdrop && (
           <Backdrop
             className={`cover ${pathname !== path ? 'opacity-0' : ''} w-max h-max min-w-[250px] md:min-w-[0]`}
