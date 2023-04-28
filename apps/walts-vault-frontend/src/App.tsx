@@ -6,7 +6,6 @@ import MintInfo from 'pages/MintInfo';
 import React, {useEffect, useState} from 'react';
 import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import {getState, providerHandlerReadOnly} from 'web3/contractInteraction';
-import configs from './web3/config.json';
 import './index.css';
 
 function App() {

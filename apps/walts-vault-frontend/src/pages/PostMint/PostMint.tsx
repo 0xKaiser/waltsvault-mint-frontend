@@ -274,7 +274,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
     }
     if (step0Status === 'loading') {
       if (chain !== undefined && chain.id !== config.chainID) {
-        return renderLoading('Switch to Goerli Testnet', false, 'chain');
+        return renderLoading('Switch to Ethereum Mainnet', false, 'chain');
       } else {
         return renderLoading('Connecting Wallet', true, 'connect');
       }

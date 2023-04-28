@@ -7,7 +7,7 @@ import App from './App';
 import {Web3Modal} from '@web3modal/react';
 import Intro from './components/Intro';
 import configs from './web3/config.json';
-import {goerli} from 'wagmi/chains';
+import {mainnet} from 'wagmi/chains';
 import {WagmiConfig, configureChains, createClient} from 'wagmi';
 import {EthereumClient, w3mConnectors, w3mProvider} from '@web3modal/ethereum';
 
@@ -18,7 +18,7 @@ GSAP.defaults({
 });
 
 const projectId = configs.PROJECT_ID;
-const chains = [goerli];
+const chains = [mainnet];
 const {provider} = configureChains(chains, [w3mProvider({projectId})]);
 const wagmiClient = createClient({
   autoConnect: true,
