@@ -1,25 +1,25 @@
-import { PAGE_ROUTE } from 'constants/index';
+import {PAGE_ROUTE} from 'constants/index';
 
 import Modal from '@twl/common/components/Modal';
 import useBreakpoints from '@twl/common/hooks/useBreakpoints';
-import { ReactComponent as IcClose } from 'assets/icons/ic-close.svg';
-import { ReactComponent as IcMenu } from 'assets/icons/ic-menu.svg';
-import { ReactComponent as VwBackdrop } from 'assets/images/backdrops/img-vw-backdrop.svg';
+import {ReactComponent as IcClose} from 'assets/icons/ic-close.svg';
+import {ReactComponent as IcMenu} from 'assets/icons/ic-menu.svg';
+import {ReactComponent as VwBackdrop} from 'assets/images/backdrops/img-vw-backdrop.svg';
 import SocialIcons from 'components/SocialIcons';
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {Link, useLocation} from 'react-router-dom';
 import configs from '../../web3/config.json';
 
 export default function Menu({
-  isMintPeriod,
-  isPostMintPeriod,
-}: {
+                               isMintPeriod,
+                               isPostMintPeriod,
+                             }: {
   isMintPeriod?: boolean;
   isPostMintPeriod?: boolean;
 }) {
-  const { isMobile, isDesktop } = useBreakpoints();
+  const {isMobile, isDesktop} = useBreakpoints();
   const [isModalOpened, setIsModalOpened] = useState(false);
-  const { pathname } = useLocation();
+  const {pathname} = useLocation();
   const isMintPage = pathname === '/mint' || pathname === '/post-mint' || pathname === '/mintInfo';
 
   useEffect(() => {
@@ -32,18 +32,18 @@ export default function Menu({
 
   function renderSubpageLinks() {
     const PAGE_ROUTE_WITH_MINT = Object.values(PAGE_ROUTE);
-    if(configs.MINT_INFO){
-      PAGE_ROUTE_WITH_MINT.push({ path: '/mintInfo', name: 'Mint Info', backdrop: VwBackdrop });
-    }else{
+    if (configs.MINT_INFO) {
+      PAGE_ROUTE_WITH_MINT.push({path: '/mintInfo', name: 'Mint Info', backdrop: VwBackdrop});
+    } else {
       if (isMintPeriod) {
-        PAGE_ROUTE_WITH_MINT.push({ path: '/mint', name: 'Mint', backdrop: VwBackdrop });
+        PAGE_ROUTE_WITH_MINT.push({path: '/mint', name: 'Mint', backdrop: VwBackdrop});
       }
       if (isPostMintPeriod) {
-        PAGE_ROUTE_WITH_MINT.push({ path: '/post-mint', name: 'Claim / Refund', backdrop: VwBackdrop });
+        PAGE_ROUTE_WITH_MINT.push({path: '/post-mint', name: 'Claim / Refund', backdrop: VwBackdrop});
       }
     }
 
-    return Object.values(PAGE_ROUTE_WITH_MINT).map(({ path, name, backdrop: Backdrop }) => (
+    return Object.values(PAGE_ROUTE_WITH_MINT).map(({path, name, backdrop: Backdrop}) => (
       <Link to={path} key={path} className="relative flex justify-center items-center z-100 mx-[-8px] link">
         {Backdrop && (
           <Backdrop
@@ -64,20 +64,20 @@ export default function Menu({
       <div className="flex flex-row w-full justify-end pt-8 pr-8">
         {!isModalOpened && (
           <div onClick={onModalClickHandler} aria-hidden="true">
-            <IcMenu />
+            <IcMenu/>
           </div>
         )}
         <Modal isOpen={isModalOpened} className="flex flex-col py-7 bg-black overflow-y-scroll">
           <div className="fixed top-4 right-4">
             <button onClick={onModalClickHandler} type="button">
-              <IcClose />
+              <IcClose/>
             </button>
           </div>
           <div className="flex flex-col w-full flex-1 items-start justify-start gap-7 py-16">
             {renderSubpageLinks()}
           </div>
           <div className="absolute bottom-4 flex flex-row w-full justify-center">
-            <SocialIcons />
+            <SocialIcons/>
           </div>
         </Modal>
       </div>
@@ -87,10 +87,10 @@ export default function Menu({
   function renderDesktopMenu() {
     return (
       <div className="flex flex-row w-full justify-between py-6 px-6">
-        <div className="absolute top-[-160px] left-[-320px] bg-black  w-[1200px] h-[300px] radial-shadow" />
+        {/*<div className="absolute top-[-160px] left-[-320px] bg-black  w-[1200px] h-[300px] radial-shadow"/>*/}
         <div className="flex relative">{renderSubpageLinks()}</div>
         <div className="ml-10 flex items-center">
-          <SocialIcons />
+          <SocialIcons/>
         </div>
       </div>
     );

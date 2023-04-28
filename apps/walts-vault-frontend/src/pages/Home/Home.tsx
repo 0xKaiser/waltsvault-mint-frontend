@@ -31,7 +31,7 @@ export default function Home({ isMintPeriod, isPostMintPeriod ,mintState}: { isM
 
   return (
     <div className="h-screen w-screen">
-      {!isMintPeriod && !isPostMintPeriod && mintState !== 'NOT_LIVE' && (
+      { mintState.length === 0 && (
         <div className="cover flex justify-center items-center bg-[rgba(0,0,0,1)] z-20">
           <h4 className="text-white loading w-[120px]">LOADING</h4>
         </div>

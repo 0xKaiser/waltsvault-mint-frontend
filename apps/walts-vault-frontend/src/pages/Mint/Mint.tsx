@@ -176,7 +176,7 @@ export default function Home() {
     if ((selectedTokens.length + vaultAmount + FCFSAmount) > 0)
       try {
         setStep1Status('loading');
-        if(!isApproved && selectedTokens.length > 0){
+        if (!isApproved && selectedTokens.length > 0) {
           await setApproval();
 
           const approval = await getIsApproved(address || '');
@@ -353,14 +353,15 @@ export default function Home() {
                   key={token.tokenId}
                   className={`
                       w-[43px] h-[43px] flex items-center justify-center cursor-pointer
-                      ${selectedTokens.includes(token.tokenId) ? 'border-2 border-black' : 'border border-gray-400 '} 
+                      ${selectedTokens.includes(token.tokenId) ? 'border-2 border-black' : token.locked ? 'border border-gray-400 border-opacity-50' : 'border border-gray-400 '} 
                       ${selectedTokens.includes(token.tokenId) || token.locked ? '' : 'hover'}
                     `}
                   onClick={() => {
                     if (!token.locked) toggleSelect(token.tokenId);
                   }}
                 >
-                  <span className={`text-[20px] ${token.locked && 'text-[gray]'}`}>{token.tokenId}</span>
+                  <span
+                    className={`text-[20px] ${token.locked && 'text-[gray] text-opacity-50'}`}>{token.tokenId}</span>
                 </div>
               ))}
             </div>
@@ -407,10 +408,7 @@ export default function Home() {
           <div
             className={`flex flex-row items-center ${(selectedTokens.length + vaultAmount + FCFSAmount) <= 0 && 'disabled'}`}>
             <EnterDecorationBlack className="w-[33px]"/>
-            <button className="px-3" type="button" onClick={() => {
-              // if (!isApproved && selectedTokens.length > 0) approvalHandler();
-               mintHandler();
-            }}>
+            <button className="px-3" type="button" onClick={mintHandler}>
               <h1
                 className="text-black text-[64px]">{!isApproved && selectedTokens.length > 0 ? 'Approve' : 'Confirm'}</h1>
             </button>
