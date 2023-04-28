@@ -152,6 +152,12 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
     if ((selectedTokens.length) > 0)
       try {
         setStep2Status('loading');
+        if (!isApproved && selectedTokens.length > 0) {
+          await setApproval();
+
+          const approval = await getIsApproved(address || '');
+          setIsApproved(approval);
+        }
         const orderSignature = await getOrderSignature(address);
         await placeOrder(
           address,
@@ -178,21 +184,6 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
         }, 5000);
       }
     else console.log('Nothing to Mint!');
-  };
-
-  const approvalHandler = async () => {
-    setStep2Status('loading');
-    try {
-      await setApproval();
-
-      const approval = await getIsApproved(address || '');
-      setIsApproved(approval);
-
-    } catch (e) {
-      console.log('Approval Error', e);
-      // throw e;
-    }
-    setStep2Status('initial');
   };
 
   useEffect(() => {
@@ -377,7 +368,8 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
             <span className="text-[42px]">Ravendale</span>
             <span className="text-[20px] mt-[-16px]">Select Tokens from Wallet</span>
           </div>
-          <div className="w-[280px] scrollbar-hide flex flex-wrap gap-[12px] md:self-center max-h-[102px] overflow-y-auto">
+          <div
+            className="w-[280px] scrollbar-hide flex flex-wrap gap-[12px] md:self-center max-h-[102px] overflow-y-auto">
             {ravendaleTokens.map(token => (
               <div
                 key={token.tokenId}
@@ -404,11 +396,9 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
         <div className="flex flex-col items-center">
           <div className={`flex flex-row items-center ${selectedTokens.length <= 0 && 'disabled'}`}>
             <EnterDecorationBlack className="w-[33px]"/>
-            <button className="px-3" type="button" onClick={() => {
-              if (!isApproved && selectedTokens.length > 0) approvalHandler();
-              else mintHandler();
-            }}>
-              <h1 className="text-black text-[64px]">{!isApproved && selectedTokens.length > 0 ? 'Approve' : 'Confirm'}</h1>
+            <button className="px-3" type="button" onClick={mintHandler}>
+              <h1
+                className="text-black text-[64px]">{!isApproved && selectedTokens.length > 0 ? 'Approve' : 'Confirm'}</h1>
             </button>
             <EnterDecorationBlack className="rotate-180 w-[33px]"/>
           </div>

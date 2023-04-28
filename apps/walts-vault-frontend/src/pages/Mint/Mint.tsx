@@ -172,24 +172,16 @@ export default function Home() {
     setSelectedTokens([]);
   };
 
-  const approvalHandler = async () => {
-    setStep1Status('loading');
-    try {
-      await setApproval();
-
-      const approval = await getIsApproved(address || '');
-      setIsApproved(approval);
-
-    } catch (e) {
-      console.log('Approval Error', e);
-    }
-    setStep1Status('initial');
-  };
-
   const mintHandler = async () => {
     if ((selectedTokens.length + vaultAmount + FCFSAmount) > 0)
       try {
         setStep1Status('loading');
+        if(!isApproved && selectedTokens.length > 0){
+          await setApproval();
+
+          const approval = await getIsApproved(address || '');
+          setIsApproved(approval);
+        }
         const orderSignature = await getOrderSignature(address);
         await placeOrder(
           address,
@@ -413,11 +405,11 @@ export default function Home() {
         </div>
         <div className="flex flex-col items-center">
           <div
-            className={`flex flex-row items-center ${isApproved && (selectedTokens.length + vaultAmount + FCFSAmount) <= 0 && 'disabled'}`}>
+            className={`flex flex-row items-center ${(selectedTokens.length + vaultAmount + FCFSAmount) <= 0 && 'disabled'}`}>
             <EnterDecorationBlack className="w-[33px]"/>
             <button className="px-3" type="button" onClick={() => {
-              if (!isApproved && selectedTokens.length > 0) approvalHandler();
-              else mintHandler();
+              // if (!isApproved && selectedTokens.length > 0) approvalHandler();
+               mintHandler();
             }}>
               <h1
                 className="text-black text-[64px]">{!isApproved && selectedTokens.length > 0 ? 'Approve' : 'Confirm'}</h1>
