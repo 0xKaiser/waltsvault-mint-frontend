@@ -19,8 +19,11 @@ function App() {
   useEffect(() => {
     (async () => {
       await providerHandlerReadOnly();
+      console.log('fetching mint status.....')
       const mintStatus = await getState();
       setMintState(mintStatus)
+      console.log('mintStatus----',mintStatus)
+      console.log('fetched')
 
       setIsMintPeriod(mintStatus === 'LIVE');
       setIs24HPostMintPeriod(mintStatus === 'OVER');
