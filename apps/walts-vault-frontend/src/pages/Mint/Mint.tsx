@@ -207,7 +207,7 @@ export default function Home() {
         setStep1Status('error');
         setTimeout(() => {
           setStep1Status('initial');
-        }, 5000);
+        }, 3000);
       }
     else console.log('Nothing to Mint!');
   };

@@ -144,7 +144,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
       setStep3Status('error');
       setTimeout(() => {
         setStep3Status('initial');
-      }, 5000);
+      }, 3000);
     }
   };
 
@@ -181,7 +181,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
         setStep2Status('error');
         setTimeout(() => {
           setStep2Status('initial');
-        }, 5000);
+        }, 3000);
       }
     else console.log('Nothing to Mint!');
   };

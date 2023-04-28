@@ -23,7 +23,7 @@ function App() {
       const mintStatus = await getState();
       setMintState(mintStatus)
       console.log('mintStatus----', mintStatus)
-      console.log('fetched')
+
       if (mintStatus.length) {
         if (mintStatus === 'LIVE' && (location.pathname === '/mintInfo' || location.pathname === '/post-mint')) {
           navigate('/mint')

@@ -46,7 +46,6 @@ export default function Menu({
       }
     }
     const handleCheckPath=(path:any)=>{
-      console.log('path----',path)
       navigate(path)
     }
 
@@ -94,7 +93,7 @@ export default function Menu({
   function renderDesktopMenu() {
     return (
       <div className="flex flex-row w-full justify-between py-6 px-6">
-        {/*<div className="absolute top-[-160px] left-[-320px] bg-black  w-[1200px] h-[300px] radial-shadow"/>*/}
+        <div className="absolute top-[-160px] left-[-320px] bg-black  w-[1200px] h-[300px] radial-shadow"/>
         <div className="flex relative">{renderSubpageLinks()}</div>
         <div className="ml-10 flex items-center">
           <SocialIcons/>
