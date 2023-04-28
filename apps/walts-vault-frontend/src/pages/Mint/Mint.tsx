@@ -12,7 +12,7 @@ import Footer from 'components/Footer';
 import Menu from 'components/Menu';
 import {useEffect, useState} from 'react';
 import config from '../../web3/config.json';
-import {useAccount, useNetwork, useSwitchNetwork, useSigner, useProvider, useDisconnect} from 'wagmi';
+import {useAccount, useNetwork, useSwitchNetwork, useSigner, useProvider} from 'wagmi';
 import {useWeb3Modal} from '@web3modal/react';
 
 import {
@@ -38,7 +38,6 @@ export default function Home() {
   const {switchNetwork} = useSwitchNetwork()
   const {data} = useSigner()
   const provider = useProvider()
-  const {disconnect}=useDisconnect()
 
   // UI States
   const [step, setStep] = useState(0);

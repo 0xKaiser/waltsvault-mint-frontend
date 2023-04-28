@@ -29,7 +29,6 @@ export default function Home({ isMintPeriod, isPostMintPeriod ,mintState}: { isM
     setLightsOn(state => !state);
   }
 
-  console.log('mintState--',mintState)
   return (
     <div className="h-screen w-screen">
       {!isMintPeriod && !isPostMintPeriod && mintState !== 'NOT_LIVE' && (
