@@ -401,7 +401,7 @@ export default function Home() {
             no. of mints: {selectedTokens.length + vaultAmount + FCFSAmount}
           </div>
           <div
-            className="text-[32px] text-white leading-[47px] mx-auto mt-[-27px] z-10">Price: {((vaultAmount + FCFSAmount) * Number(mintPrice)).toFixed(2)} eth
+            className="text-[32px] text-white leading-[47px] mx-auto mt-[-27px] z-10">Price: {((vaultAmount + FCFSAmount) * Number(mintPrice)).toFixed(3)} eth
           </div>
         </div>
         <div className="flex flex-col items-center">
