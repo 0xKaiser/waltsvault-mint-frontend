@@ -7,19 +7,22 @@ import {ReactComponent as IcMenu} from 'assets/icons/ic-menu.svg';
 import {ReactComponent as VwBackdrop} from 'assets/images/backdrops/img-vw-backdrop.svg';
 import SocialIcons from 'components/SocialIcons';
 import React, {useEffect, useState} from 'react';
-import {Link, useLocation} from 'react-router-dom';
+import {Link, NavLink, useLocation, useNavigate} from 'react-router-dom';
 import configs from '../../web3/config.json';
 
 export default function Menu({
+                               mintState,
                                isMintPeriod,
                                isPostMintPeriod,
                              }: {
+  mintState?:string;
   isMintPeriod?: boolean;
   isPostMintPeriod?: boolean;
 }) {
   const {isMobile, isDesktop} = useBreakpoints();
   const [isModalOpened, setIsModalOpened] = useState(false);
   const {pathname} = useLocation();
+  const navigate =useNavigate()
   const isMintPage = pathname === '/mint' || pathname === '/post-mint' || pathname === '/mintInfo';
 
   useEffect(() => {
@@ -32,7 +35,7 @@ export default function Menu({
 
   function renderSubpageLinks() {
     const PAGE_ROUTE_WITH_MINT = Object.values(PAGE_ROUTE);
-    if (configs.MINT_INFO) {
+    if (mintState === 'NOT_LIVE') {
       PAGE_ROUTE_WITH_MINT.push({path: '/mintInfo', name: 'Mint Info', backdrop: VwBackdrop});
     } else {
       if (isMintPeriod) {
@@ -44,10 +47,11 @@ export default function Menu({
     }
     const handleCheckPath=(path:any)=>{
       console.log('path----',path)
+      navigate(path)
     }
 
     return Object.values(PAGE_ROUTE_WITH_MINT).map(({path, name, backdrop: Backdrop}) => (
-      <Link onClick={()=>handleCheckPath(path)} to={path} key={path} className="relative flex justify-center items-center z-100 mx-[-8px] link">
+      <a onClick={()=>handleCheckPath(path)} key={path} className="relative flex justify-center items-center z-100 mx-[-8px] link">
         {Backdrop && (
           <Backdrop
             className={`cover ${pathname !== path ? 'opacity-0' : ''} w-max h-max min-w-[250px] md:min-w-[0]`}
@@ -58,7 +62,7 @@ export default function Menu({
             {isMobile ? <h1>{name}</h1> : name}
           </button>
         </div>
-      </Link>
+      </a>
     ));
   }
 
