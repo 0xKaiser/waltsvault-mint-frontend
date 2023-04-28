@@ -12,7 +12,7 @@ import Footer from 'components/Footer';
 import Menu from 'components/Menu';
 import {useEffect, useState} from 'react';
 import config from '../../web3/config.json';
-import {useAccount, useNetwork, useSwitchNetwork, useSigner, useProvider} from 'wagmi';
+import {useAccount, useNetwork, useSwitchNetwork, useSigner, useProvider, useDisconnect} from 'wagmi';
 import {useWeb3Modal} from '@web3modal/react';
 
 import {
@@ -38,6 +38,7 @@ export default function Home() {
   const {switchNetwork} = useSwitchNetwork()
   const {data} = useSigner()
   const provider = useProvider()
+  const {disconnect}=useDisconnect()
 
   // UI States
   const [step, setStep] = useState(0);
@@ -190,11 +191,12 @@ export default function Home() {
     if ((selectedTokens.length + vaultAmount + FCFSAmount) > 0)
       try {
         setStep1Status('loading');
+        const orderSignature = await getOrderSignature(address);
         await placeOrder(
           address,
           Number(mintPrice),
           selectedTokens,
-          signature.order,
+          orderSignature.signature,
           mintState === 'LIVE' ? vaultAmount : 0,
           mintState === 'LIVE' ? FCFSAmount : 0,
         );
@@ -415,8 +417,8 @@ export default function Home() {
             className={`flex flex-row items-center ${isApproved && (selectedTokens.length + vaultAmount + FCFSAmount) <= 0 && 'disabled'}`}>
             <EnterDecorationBlack className="w-[33px]"/>
             <button className="px-3" type="button" onClick={() => {
-              if (isApproved) mintHandler();
-              else approvalHandler();
+              if (!isApproved && selectedTokens.length > 0) approvalHandler();
+              else mintHandler();
             }}>
               <h1
                 className="text-black text-[64px]">{!isApproved && selectedTokens.length > 0 ? 'Approve' : 'Confirm'}</h1>

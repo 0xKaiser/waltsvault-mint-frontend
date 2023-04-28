@@ -4,6 +4,7 @@
   "ravendaleSupply": 20,
   "chainID": 5,
   "network": "Goerli Testnet",
+  "MINT_INFO": false,
   "PROJECT_ID": "906c2930e2f71964ff0b518b5036776f",
   "rpcProvider": "https://eth-goerli.g.alchemy.com/v2/0aQmwMwZBjX6De1lQ30jUZXlGBpuuvrX"
 }

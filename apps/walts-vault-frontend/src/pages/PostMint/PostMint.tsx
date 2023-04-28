@@ -92,11 +92,12 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
     );
   }
 
-  function renderLoading(subTitle: string) {
+  function renderLoading(subTitle: string, isLoading: boolean, width: string) {
     return (
-      <div className="flex flex-col md:flex-row items-center">
+      <div className="flex flex-col md:flex-row gap-4 items-center">
         <PaintbrushBlack/>
-        <h3 className="text-h3 ml-[5%] whitespace-nowrap">{subTitle}</h3>
+        <h3
+          className={`${width} text-h3 whitespace-nowrap ${isLoading && 'loading'}`}>{subTitle}</h3>
       </div>
     );
   }
@@ -133,7 +134,8 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
   const refundHandler = async () => {
     setStep3Status('loading');
     try {
-      await refund(signature.refund);
+      const refundSignature = await getRefundSignature(address);
+      await refund(refundSignature.signature);
       await updateAccount();
       setStep3Status('completed');
     } catch (e) {
@@ -150,11 +152,12 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
     if ((selectedTokens.length) > 0)
       try {
         setStep2Status('loading');
+        const orderSignature = await getOrderSignature(address);
         await placeOrder(
           address,
           Number(mintPrice),
           selectedTokens,
-          signature.order,
+          orderSignature.signature,
           0,
           0,
         );
@@ -280,9 +283,9 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
     }
     if (step0Status === 'loading') {
       if (chain !== undefined && chain.id !== config.chainID) {
-        return renderLoading('Switch to Goerli Testnet');
+        return renderLoading('Switch to Goerli Testnet', false, 'chain');
       } else {
-        return renderLoading('Connecting Wallet...');
+        return renderLoading('Connecting Wallet', true, 'connect');
       }
     }
     return (
@@ -350,7 +353,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
       else return renderError(step2ErrorMessage, 'Please Try Again');
     }
     if (step2Status === 'loading') {
-      return renderLoading('In Progress...');
+      return renderLoading('In Progress', true, 'progress');
     }
     if (step2Status === 'completed') {
       return (
@@ -399,13 +402,13 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
             mints: {selectedTokens.length}</div>
         </div>
         <div className="flex flex-col items-center">
-          <div className={`flex flex-row items-center ${isApproved && selectedTokens.length <= 0 && 'disabled'}`}>
+          <div className={`flex flex-row items-center ${selectedTokens.length <= 0 && 'disabled'}`}>
             <EnterDecorationBlack className="w-[33px]"/>
             <button className="px-3" type="button" onClick={() => {
-              if (isApproved) mintHandler();
-              else approvalHandler();
+              if (!isApproved && selectedTokens.length > 0) approvalHandler();
+              else mintHandler();
             }}>
-              <h1 className="text-black text-[64px]">{isApproved ? 'Claim' : 'Approve'}</h1>
+              <h1 className="text-black text-[64px]">{!isApproved && selectedTokens.length > 0 ? 'Approve' : 'Confirm'}</h1>
             </button>
             <EnterDecorationBlack className="rotate-180 w-[33px]"/>
           </div>
@@ -422,7 +425,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
       else return renderError(step3ErrorMessage, 'Please Try Again');
     }
     if (step3Status === 'loading') {
-      return renderLoading('In Progress...');
+      return renderLoading('In Progress', true, 'progress');
     }
     if (step3Status === 'completed') {
       return (

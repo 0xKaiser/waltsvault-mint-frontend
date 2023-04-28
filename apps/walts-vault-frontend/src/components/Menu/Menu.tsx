@@ -8,6 +8,7 @@ import { ReactComponent as VwBackdrop } from 'assets/images/backdrops/img-vw-bac
 import SocialIcons from 'components/SocialIcons';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import configs from '../../web3/config.json';
 
 export default function Menu({
   isMintPeriod,
@@ -19,7 +20,7 @@ export default function Menu({
   const { isMobile, isDesktop } = useBreakpoints();
   const [isModalOpened, setIsModalOpened] = useState(false);
   const { pathname } = useLocation();
-  const isMintPage = pathname === '/mint' || pathname === '/post-mint';
+  const isMintPage = pathname === '/mint' || pathname === '/post-mint' || pathname === '/mintInfo';
 
   useEffect(() => {
     setIsModalOpened(false);
@@ -31,14 +32,19 @@ export default function Menu({
 
   function renderSubpageLinks() {
     const PAGE_ROUTE_WITH_MINT = Object.values(PAGE_ROUTE);
-    if (isMintPeriod) {
-      PAGE_ROUTE_WITH_MINT.push({ path: '/mint', name: 'Mint', backdrop: VwBackdrop });
+    if(configs.MINT_INFO){
+      PAGE_ROUTE_WITH_MINT.push({ path: '/mintInfo', name: 'Mint Info', backdrop: VwBackdrop });
+    }else{
+      if (isMintPeriod) {
+        PAGE_ROUTE_WITH_MINT.push({ path: '/mint', name: 'Mint', backdrop: VwBackdrop });
+      }
+      if (isPostMintPeriod) {
+        PAGE_ROUTE_WITH_MINT.push({ path: '/post-mint', name: 'Claim / Refund', backdrop: VwBackdrop });
+      }
     }
-    if (isPostMintPeriod) {
-      PAGE_ROUTE_WITH_MINT.push({ path: '/post-mint', name: 'Claim / Refund', backdrop: VwBackdrop });
-    }
+
     return Object.values(PAGE_ROUTE_WITH_MINT).map(({ path, name, backdrop: Backdrop }) => (
-      <Link to={path} key={path} className="relative flex justify-center items-center z-100 mx-[-8px]">
+      <Link to={path} key={path} className="relative flex justify-center items-center z-100 mx-[-8px] link">
         {Backdrop && (
           <Backdrop
             className={`cover ${pathname !== path ? 'opacity-0' : ''} w-max h-max min-w-[250px] md:min-w-[0]`}

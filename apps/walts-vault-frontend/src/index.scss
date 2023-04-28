@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Slabo+13px&display=swap');
 
 $sm: 640px;
 $md: 768px;
@@ -40,6 +41,35 @@ button {
   font-size: 40px;
 }
 
+.info-text {
+  font-family: 'Slabo 13px', serif;
+}
+
+.link {
+  svg {
+    transition: all 0.3s ease-in-out;
+  }
+
+  div {
+    button {
+      transition: all 0.3s ease-in-out;
+    }
+  }
+}
+
+.link:hover {
+  svg {
+    opacity: 1 !important;
+  }
+
+  div {
+    button {
+      color: black !important;
+    }
+  }
+}
+
+
 @media (max-width: $md) {
   h1 {
     font-size: 64px;
@@ -61,6 +91,14 @@ button {
   .progress {
     width: 135px !important;
   }
+  .infoCover {
+    top: 120px !important;
+    height: 70vh !important;
+  }
+}
+
+button.w3m-icon-right{
+  background-color: red !important;
 }
 
 html,
@@ -73,7 +111,7 @@ body {
 }
 
 .hover:hover {
-  border: 2px solid rgba(0,0,0,0.5);
+  border: 2px solid rgba(0, 0, 0, 0.5);
 }
 
 body {
@@ -96,8 +134,8 @@ body {
   overflow: hidden;
   display: inline-block;
   vertical-align: bottom;
-  -webkit-animation: ellipsis steps(4, end) 1s infinite;
-  animation: ellipsis steps(4, end) 1s infinite;
+  -webkit-animation: ellipsis steps(4, end) 1.5s infinite;
+  animation: ellipsis steps(4, end) 1.5s infinite;
   content: "...";
   width: 0px;
 }
