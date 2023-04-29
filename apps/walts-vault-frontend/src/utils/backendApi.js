@@ -13,7 +13,7 @@ export const getOrderSignature = async (address) => {
 
 export const getRefundSignature = async (address) => {
   try {
-    const { data } = await axios.post(BASE_URL + "/signer/refund", { address: address });
+    const { data } = await axios.post(BASE_URL + "/refund", { address: address });
     return data;
   } catch (err) {
     return false;
