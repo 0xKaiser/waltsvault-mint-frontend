@@ -101,6 +101,17 @@ button.w3m-icon-right{
   background-color: red !important;
 }
 
+.animation{
+  animation: smooth 1s linear forwards ;
+  opacity: 1;
+}
+
+@keyframes smooth {
+  from {opacity: 0}
+  to {opacity: 1;}
+
+}
+
 html,
 body {
   overscroll-behavior-y: none;

@@ -94,7 +94,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
 
   function renderLoading(subTitle: string, isLoading: boolean, width: string) {
     return (
-      <div className="flex flex-col md:flex-row gap-4 items-center">
+      <div className="flex flex-col md:flex-row gap-4 items-center animation">
         <PaintbrushBlack/>
         <h3
           className={`${width} text-h3 whitespace-nowrap ${isLoading && 'loading'}`}>{subTitle}</h3>
@@ -104,7 +104,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
 
   function render24HPostMint() {
     return (
-      <div className="flex flex-col items-center max-w-[90vw]">
+      <div className="flex flex-col items-center max-w-[90vw] animation">
         <Palette/>
         <br/>
         <h3 className="text-[20px] md:text-[40px] whitespace-nowrap">Mint Has Successfully Completed</h3>
@@ -300,7 +300,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
   function renderStep1() {
     return (
       <>
-        <div className="flex flex-col md:flex-row items-center max-w-[90vw]">
+        <div className="flex flex-col md:flex-row items-center max-w-[90vw] animation">
           <div className="flex items-center">
             <EnterDecorationBlack/>
             <button className="px-10" type="button" onClick={() => {
@@ -352,7 +352,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
     }
     if (step2Status === 'completed') {
       return (
-        <div className="flex flex-col items-center max-w-[90vw]">
+        <div className="flex flex-col items-center max-w-[90vw] animation">
           <Palette/>
           <br/>
           <h3 className="text-[20px] md:text-[40px] whitespace-nowrap">Congrats Dreamer!</h3>
@@ -366,7 +366,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
       );
     }
     return (
-      <div className="flex flex-col select-none max-w-[90vw]">
+      <div className="flex flex-col select-none max-w-[90vw] animation">
         <div className="flex flex-col md:flex-row justify-start md:justify-between">
           <div className="flex flex-col">
             <span className="text-[42px]">Ravendale</span>
@@ -424,7 +424,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
     }
     if (step3Status === 'completed') {
       return (
-        <div className="flex flex-col items-center max-w-[90vw]">
+        <div className="flex flex-col items-center max-w-[90vw] animation">
           <Palette/>
           <br/>
           <h3 className="text-[20px] md:text-[40px] whitespace-nowrap">The Dream doesn’t end here</h3>
@@ -438,7 +438,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
       );
     }
     return (
-      <div className="flex flex-col select-none max-w-[90vw]">
+      <div className="flex flex-col select-none max-w-[90vw] animation">
         <h3 className="text-h2 whitespace-nowrap">Allocated Merkels: {allocatedMerkels}</h3>
         <div className="flex flex-col items-center mx-auto mt-[16px] relative">
           <MintTotalBackdrop className="absolute z-0"/>

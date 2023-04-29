@@ -79,7 +79,7 @@ export default function Home() {
 
   function renderLoading(subTitle: string, isLoading: boolean, width: string) {
     return (
-      <div className="flex flex-col md:flex-row gap-4 items-center">
+      <div className="flex flex-col md:flex-row gap-4 items-center animation">
         <PaintbrushBlack/>
         <h3
           className={`${width} text-h3 whitespace-nowrap ${isLoading && 'loading'}`}>{subTitle}</h3>
