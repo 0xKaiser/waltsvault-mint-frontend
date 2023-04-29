@@ -82,7 +82,7 @@ export default function Menu({
           <div className="flex flex-col w-full flex-1 items-start justify-start gap-7 py-16">
             {renderSubpageLinks()}
           </div>
-          <div className="absolute bottom-4 flex flex-row w-full justify-center">
+          <div className="absolute bottom-8 flex flex-row w-full justify-end">
             <SocialIcons/>
           </div>
         </Modal>

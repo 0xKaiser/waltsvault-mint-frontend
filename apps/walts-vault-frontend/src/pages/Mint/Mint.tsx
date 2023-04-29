@@ -134,10 +134,11 @@ export default function Home() {
     const totalAllocatedSpots = selectedRD + lockedTokens + vaultData.allocatedSpots;
     const maxReservations = totalAllocatedSpots * vaultData.reservationPerSpot;
     const maxMint = maxReservations - vaultData.usedReservations;
-    if (maxMint < vaultAmount) {
-      setVaultAmount(maxMint)
+    if (maxMint <= vaultAmount) {
+      setVaultAmount(0)
+    } else {
+      setMaxVaultMint(maxMint);
     }
-    setMaxVaultMint(maxMint);
   };
 
   useEffect(() => {
@@ -401,7 +402,7 @@ export default function Home() {
             no. of mints: {selectedTokens.length + vaultAmount + FCFSAmount}
           </div>
           <div
-            className="text-[32px] text-white leading-[47px] mx-auto mt-[-27px] z-10">Price: {((vaultAmount + FCFSAmount) * Number(mintPrice)).toFixed(3)} eth
+            className="text-[32px] text-white leading-[47px] mx-auto mt-[-27px] z-10">Price: {((vaultAmount + FCFSAmount) * Number(mintPrice)).toFixed(5)} eth
           </div>
         </div>
         <div className="flex flex-col items-center">
