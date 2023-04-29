@@ -18,10 +18,12 @@ const INTRO_FADE_ANIMATION_DURATION = 0.3;
 
 export default function Intro() {
   const navigationType = useNavigationType();
-  const [state, setState] = useState<IntroState>(IntroState.LOADING);
+  const [state, setState] = useState<IntroState>(IntroState.READY);
   const videoRef = useRef<HTMLVideoElement>(null);
   const buttonContainerRef = useRef(null);
   const containerRef = useRef(null);
+  const [videoDebug, setVideoDebug] = useState<string[]>([]);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   useEffect(() => {
     if (!buttonContainerRef.current || !videoRef.current || !containerRef.current) return;
@@ -43,6 +45,11 @@ export default function Intro() {
       default:
         break;
     }
+
+    console.log('STATE:', IntroState[state]);
+    let debugArr = videoDebug;
+    debugArr.push(IntroState[state]);
+    setVideoDebug(debugArr);
   }, [state]);
 
   function enter() {
@@ -50,6 +57,12 @@ export default function Intro() {
 
     videoRef.current.currentTime = 0;
     setState(IntroState.PLAYING);
+
+    setTimeout(() => {
+      if (state !== IntroState.COMPLETED) {
+        onVideoEnd();
+      }
+    }, 2500)
   }
 
   function onVideoEnd() {
@@ -59,6 +72,7 @@ export default function Intro() {
   const readyRef = useRef(0);
   function onCanPlay() {
     readyRef.current += 2;
+    setVideoLoaded(true);
 
     if (state === IntroState.LOADING && readyRef.current >= 1) {
       setState(IntroState.READY);
@@ -82,6 +96,7 @@ export default function Intro() {
           playsInline
           onEnded={!showStaticVideo ? onVideoEnd : undefined}
           onLoadedData={onCanPlay}
+          preload='auto'
           muted
         />
       </div>
@@ -91,6 +106,7 @@ export default function Intro() {
             playsInline
             className="h-full w-full object-cover bg-black"
             onLoadedData={onCanPlay}
+            preload='auto'
             src={CURTAINS_STATIC_VIDEO}
             muted
             autoPlay
@@ -101,12 +117,27 @@ export default function Intro() {
       <div ref={buttonContainerRef} className="cover flex justify-center items-center">
         <div className="flex items-center">
           <EnterDecoration className="rotate-180" />
-          <button type="button" onClickCapture={enter} disabled={buttonDisabled} className="px-10">
+          <button type="button" onClickCapture={enter} className="px-10">
             <h1 className="text-white">Enter</h1>
           </button>
           <EnterDecoration />
         </div>
       </div>
+      {/* <span style={{
+        position: 'absolute',
+        inset: '0 0',
+        fontSize: '1rem',
+        color: '#FFF',
+        pointerEvents: 'none',
+        background: 'hsla(0, 0%, 0%, 0.75)',
+        width: 'fit-content',
+        height: 'fit-content',
+        fontFamily: 'sans-serif'
+      }}>
+        CUR STATE: {IntroState[state]} <br />
+        PREV STATES: {videoDebug.toString()} <br />
+        VID LOADED: {videoLoaded + " " + readyRef.current}
+      </span> */}
     </div>
   );
 }

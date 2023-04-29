@@ -20,7 +20,7 @@ export default function Home({ isMintPeriod, isPostMintPeriod, mintState}: { isM
 
         <Menu mintState={mintState}  isMintPeriod={isMintPeriod} isPostMintPeriod={isPostMintPeriod} />
         <div className="cover infoCover flex flex-col gap-4 md:gap-[40px] justify-start md:justify-center items-center">
-          <div className="text-[64px] flex justify-center items-center h-[50px]">Mint Info</div>
+          {/* <div className="text-[64px] flex justify-center items-center h-[50px]">Mint Info</div> */}
           <div className='flex flex-col md:flex-row gap-[50px] justify-start md:justify-center items-center h-[100%] md:h-[auto] overflow-y-auto'>
             <div className="max-w-[300px] flex flex-col gap-1">
               <div className="flex items-center relative justify-center">

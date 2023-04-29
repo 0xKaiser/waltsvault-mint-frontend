@@ -424,8 +424,12 @@ export default function Home({routeStatus}: { routeStatus: string }) {
             className={`flex flex-row items-center ${isApproved && routeStatus === 'NOT_LIVE' && 'disabled'}  ${(selectedTokens.length + vaultAmount + FCFSAmount) <= 0 && 'disabled'}`}>
             <EnterDecorationBlack className="w-[33px]"/>
             <button className="px-3" type="button" onClick={mintHandler}>
-              <h1
-                className="text-black text-[64px]">{!isApproved && selectedTokens.length > 0 ? 'Approve' : 'Confirm'}</h1>
+              <h1 className="text-black text-[64px]">
+                {(!isApproved && selectedTokens.length > 0) ? 
+                  routeStatus === 'NOT_LIVE' ? 'Approve' : 'Approve & Confirm' 
+                  : 'Confirm'
+                }
+              </h1>
             </button>
             <EnterDecorationBlack className="rotate-180 w-[33px]"/>
           </div>
