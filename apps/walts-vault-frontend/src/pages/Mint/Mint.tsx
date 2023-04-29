@@ -64,7 +64,7 @@ export default function Home() {
 
   function renderError(title: string, subTitle: string) {
     return (
-      <div className="flex flex-col items-center max-w-[90vw]">
+      <div className="flex flex-col items-center max-w-[90vw] animation">
         <BrokenPencilBlack/>
         <br/>
         <h3 className="text-[20px] md:text-[40px] whitespace-nowrap">{title}</h3>
@@ -79,7 +79,7 @@ export default function Home() {
 
   function renderLoading(subTitle: string, isLoading: boolean, width: string) {
     return (
-      <div className="flex flex-col md:flex-row gap-4 items-center">
+      <div className="flex flex-col md:flex-row gap-4 items-center animation">
         <PaintbrushBlack/>
         <h3
           className={`${width} text-h3 whitespace-nowrap ${isLoading && 'loading'}`}>{subTitle}</h3>
@@ -302,7 +302,7 @@ export default function Home() {
     }
     return (
       <>
-        <div className="flex items-center">
+        <div className="flex items-center animation">
           <EnterDecorationBlack/>
           <button className="px-10" type="button" onClick={connectWallet}>
             <h1 className="text-black">Connect</h1>
@@ -323,7 +323,7 @@ export default function Home() {
     }
     if (step1Status === 'completed') {
       return (
-        <div className="flex flex-col items-center max-w-[90vw]">
+        <div className="flex flex-col items-center max-w-[90vw] animation">
           <Palette/>
           <br/>
           <h3 className="text-[20px] md:text-[40px] whitespace-nowrap">Congrats Dreamer!</h3>
@@ -337,7 +337,7 @@ export default function Home() {
       );
     }
     return (
-      <div className="flex flex-col select-none max-w-[90vw]">
+      <div className="flex flex-col select-none max-w-[90vw] animation">
         {/* Ravendale Section */}
         {ravendaleTokens.length > 0 &&
         <>
