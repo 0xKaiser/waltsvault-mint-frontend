@@ -687,11 +687,6 @@
         "internalType": "address",
         "name": "_treasury",
         "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "merkelAddr",
-        "type": "address"
       }
     ],
     "name": "initialize",
@@ -1118,7 +1113,7 @@
     "name": "state",
     "outputs": [
       {
-        "internalType": "enum WaltsVaultReservation.currentState",
+        "internalType": "enum Reservation.currentState",
         "name": "",
         "type": "uint8"
       }

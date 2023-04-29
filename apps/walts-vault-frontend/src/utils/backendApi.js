@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://waltsvaultmint.0xytocin.online/signer/";
+const BASE_URL = "https://seahorse-app-dpo4n.ondigitalocean.app/signer/";
 
 export const getOrderSignature = async (address) => {
   try {

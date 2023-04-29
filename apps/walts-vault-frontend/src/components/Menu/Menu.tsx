@@ -34,7 +34,7 @@ export default function Menu({
 
   function renderSubpageLinks() {
     const PAGE_ROUTE_WITH_MINT = Object.values(PAGE_ROUTE);
-
+    
     if (isMintPeriod) {
       PAGE_ROUTE_WITH_MINT.push({path: '/mint', name: 'Mint', backdrop: VwBackdrop});
     }

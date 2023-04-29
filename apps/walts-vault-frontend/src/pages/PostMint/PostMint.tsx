@@ -79,7 +79,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
 
   function renderError(title: string, subTitle: string) {
     return (
-      <div className="flex flex-col items-center max-w-[90vw]">
+      <div className="flex flex-col items-center max-w-[90vw] animation">
         <BrokenPencilBlack/>
         <br/>
         {title.length > 0 && <h3 className="text-[20px] md:text-[40px] whitespace-nowrap">{title}</h3>}
@@ -144,7 +144,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
       setStep3Status('error');
       setTimeout(() => {
         setStep3Status('initial');
-      }, 5000);
+      }, 3000);
     }
   };
 
@@ -181,7 +181,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
         setStep2Status('error');
         setTimeout(() => {
           setStep2Status('initial');
-        }, 5000);
+        }, 3000);
       }
     else console.log('Nothing to Mint!');
   };
@@ -217,6 +217,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
     if (signature.refund !== undefined) {
       setRefundAmount((usedReservationsVL + usedReservationsFCFS) - signature.refund[1]);
     } else {
+
       setRefundAmount(0)
     }
   };
@@ -278,14 +279,14 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
     }
     if (step0Status === 'loading') {
       if (chain !== undefined && chain.id !== config.chainID) {
-        return renderLoading('Switch to Goerli Testnet', false, 'chain');
+        return renderLoading('Switch to Ethereum Mainnet', false, 'chain');
       } else {
         return renderLoading('Connecting Wallet', true, 'connect');
       }
     }
     return (
       <>
-        <div className="flex items-center">
+        <div className="flex items-center animation">
           <EnterDecorationBlack/>
           <button className="px-10" type="button" onClick={connectWallet}>
             <h1 className="text-black">Connect</h1>

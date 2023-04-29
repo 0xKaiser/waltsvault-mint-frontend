@@ -65,7 +65,7 @@ export default function Home({routeStatus}: { routeStatus: string }) {
 
   function renderError(title: string, subTitle: string) {
     return (
-      <div className="flex flex-col items-center max-w-[90vw]">
+      <div className="flex flex-col items-center max-w-[90vw] animation">
         <BrokenPencilBlack/>
         <br/>
         <h3 className="text-[20px] md:text-[40px] whitespace-nowrap">{title}</h3>
@@ -218,7 +218,7 @@ export default function Home({routeStatus}: { routeStatus: string }) {
         setStep1Status('error');
         setTimeout(() => {
           setStep1Status('initial');
-        }, 5000);
+        }, 3000);
       }
     else console.log('Nothing to Mint!');
   };
@@ -306,14 +306,14 @@ export default function Home({routeStatus}: { routeStatus: string }) {
     }
     if (step0Status === 'loading') {
       if (chain !== undefined && chain.id !== config.chainID) {
-        return renderLoading('Switch to Goerli Testnet', false, 'chain');
+        return renderLoading('Switch to Ethereum Mainnet', false, 'chain');
       } else {
         return renderLoading('Connecting Wallet', true, 'connect');
       }
     }
     return (
       <>
-        <div className="flex items-center">
+        <div className="flex items-center animation">
           <EnterDecorationBlack/>
           <button className="px-10" type="button" onClick={connectWallet}>
             <h1 className="text-black">Connect</h1>
@@ -336,7 +336,7 @@ export default function Home({routeStatus}: { routeStatus: string }) {
     }
     if (step1Status === 'completed') {
       return (
-        <div className="flex flex-col items-center max-w-[90vw]">
+        <div className="flex flex-col items-center max-w-[90vw] animation">
           <Palette/>
           <br/>
           <h3 className="text-[20px] md:text-[40px] whitespace-nowrap">Congrats Dreamer!</h3>
@@ -350,7 +350,7 @@ export default function Home({routeStatus}: { routeStatus: string }) {
       );
     }
     return (
-      <div className="flex flex-col select-none max-w-[90vw]">
+      <div className="flex flex-col select-none max-w-[90vw] animation">
         {/* Ravendale Section */}
         {ravendaleTokens.length > 0 &&
         <>

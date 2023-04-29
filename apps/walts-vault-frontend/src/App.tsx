@@ -6,7 +6,6 @@ import MintInfo from 'pages/MintInfo';
 import React, {useEffect, useState} from 'react';
 import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import {getState, providerHandlerReadOnly} from 'web3/contractInteraction';
-import configs from './web3/config.json';
 import './index.css';
 
 function App() {
@@ -24,7 +23,7 @@ function App() {
       const mintStatus = await getState();
       setMintState(mintStatus)
       console.log('mintStatus----', mintStatus)
-      console.log('fetched')
+
       if (mintStatus.length) {
         if ((mintStatus === 'LIVE' || mintStatus === 'NOT_LIVE') && (location.pathname === '/claim-and-refund')) {
           navigate('/mint')
@@ -43,6 +42,7 @@ function App() {
     <Routes>
       <Route path="*" element={<Home mintState={mintState} isMintPeriod={isMintPeriod}
                                      isPostMintPeriod={isPostMintPeriod}/>}/>
+
       <Route path="/mint-info" element={<MintInfo mintState={mintState} isMintPeriod={isMintPeriod}
                                                   isPostMintPeriod={isPostMintPeriod}/>}/>
       <Route path="/mint" element={isMintPeriod ? <Mint routeStatus={mintState}/> : null}/>

@@ -177,6 +177,17 @@ body {
   width: 330px;
 }
 
+.animation{
+  animation: smooth 1s linear forwards ;
+  opacity: 1;
+}
+
+@keyframes smooth {
+  from {opacity: 0}
+  to {opacity: 1;}
+
+}
+
 .cover {
   top: 0;
   bottom: 0;
