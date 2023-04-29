@@ -415,7 +415,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
     if (step3Status === 'error') {
       if (signature.refund === undefined) return renderError('', 'No Reservation Detected');
       if (reservations <= 0) return renderError('', 'No Reservation Detected');
-      else if (refundAmount === 0) return renderError('', 'Not Eligible for Refund');
+      else if (refundAmount <= 0) return renderError('', 'Not Eligible for Refund');
       else if (claimedRefund) return renderError('', 'Refund already claimed');
       else return renderError(step3ErrorMessage, 'Please Try Again');
     }
