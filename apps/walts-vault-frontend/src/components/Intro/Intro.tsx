@@ -33,6 +33,7 @@ export default function Intro() {
           duration: BUTTON_OPACITY_ANIMATION_DURATION,
         });
         videoRef.current.play();
+        Sound.setMute(Sound.getIsMuted());
         Sound.playBackgroundMusic();
         break;
 

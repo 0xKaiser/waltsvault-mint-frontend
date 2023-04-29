@@ -84,9 +84,9 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
         <br/>
         {title.length > 0 && <h3 className="text-[20px] md:text-[40px] whitespace-nowrap">{title}</h3>}
         <div className="max-w-[100%] relative flex items-center text-center w-[800px]">
-          <MintErrorBackdrop className="max-w-[100%] mx-auto"/>
+          <MintErrorBackdrop className="md:max-w-[100%] mx-auto"/>
           <h2
-            className="absolute top-[5px] w-[100%] text-[30px] md:text-[64px] text-white whitespace-nowrap mx-auto">{subTitle}</h2>
+            className="absolute top-[5px] w-[100%] text-[30px] md:text-[50px] text-white whitespace-nowrap mx-auto">{subTitle}</h2>
         </div>
       </div>
     );
@@ -220,7 +220,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
       setRefundAmount(0)
     }
   };
-  console.log(signature)
+  
   const accountSetup = async () => {
     setStep(0);
     setStep0Status('loading');
