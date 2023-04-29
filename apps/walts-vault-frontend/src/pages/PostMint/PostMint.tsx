@@ -312,7 +312,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
             <EnterDecorationBlack/>
             <button className="px-10" type="button" onClick={() => {
               setStep(3);
-              if (refundAmount <= 0 || claimedRefund || reservations <= 0) setStep3Status('error');
+              if (signature.refund === undefined || refundAmount <= 0 || claimedRefund || reservations <= 0) setStep3Status('error');
             }}>
               <h1 className="text-black">Refund</h1>
             </button>
@@ -409,6 +409,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
 
   function renderStep3() {
     if (step3Status === 'error') {
+      if (signature.refund === undefined) return renderError('', 'No Reservation Detected');
       if (reservations <= 0) return renderError('', 'No Reservation Detected');
       else if (refundAmount === 0) return renderError('', 'Not Eligible for Refund');
       else if (claimedRefund) return renderError('', 'Refund already claimed');
