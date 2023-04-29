@@ -14,13 +14,14 @@ export default function Menu({
                                isMintPeriod,
                                isPostMintPeriod,
                              }: {
+  mintState?: string;
   isMintPeriod?: boolean;
   isPostMintPeriod?: boolean;
 }) {
   const {isMobile, isDesktop} = useBreakpoints();
   const [isModalOpened, setIsModalOpened] = useState(false);
   const {pathname} = useLocation();
-  const navigate =useNavigate()
+  const navigate = useNavigate()
   const isMintPage = pathname === '/mint' || pathname === '/claim-and-refund';
 
   useEffect(() => {
@@ -33,18 +34,21 @@ export default function Menu({
 
   function renderSubpageLinks() {
     const PAGE_ROUTE_WITH_MINT = Object.values(PAGE_ROUTE);
+    
     if (isMintPeriod) {
       PAGE_ROUTE_WITH_MINT.push({path: '/mint', name: 'Mint', backdrop: VwBackdrop});
     }
     if (isPostMintPeriod) {
       PAGE_ROUTE_WITH_MINT.push({path: '/claim-and-refund', name: 'Claim / Refund', backdrop: VwBackdrop});
     }
-    const handleCheckPath=(path:any)=>{
+    const handleCheckPath = (path: any) => {
+      console.log('path----', path)
       navigate(path)
     }
 
     return Object.values(PAGE_ROUTE_WITH_MINT).map(({path, name, backdrop: Backdrop}) => (
-      <a onClick={()=>handleCheckPath(path)} key={path} className="relative flex justify-center items-center z-100 mx-[-8px] link">
+      <a onClick={() => handleCheckPath(path)} key={path}
+         className="relative flex justify-center items-center z-100 mx-[-8px] link">
         {Backdrop && (
           <Backdrop
             className={`cover ${pathname !== path ? 'opacity-0' : ''} w-max h-max min-w-[250px] md:min-w-[0]`}

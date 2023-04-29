@@ -44,6 +44,7 @@ export default function Home({routeStatus}: { routeStatus: string }) {
   const [step0Status, setStep0Status] = useState('initial'); // initial loading error completed
   const [step1Status, setStep1Status] = useState('initial'); // initial loading error completed
   const [errorMessage, setErrorMessage] = useState('Hmmm, something went wrong');
+  const [successMessage, setSuccessMessage] = useState('Successfully Reserved')
 
   // Mint Logic States
   const [signature, setSignature] = useState({order: [], refund: []});
@@ -182,6 +183,7 @@ export default function Home({routeStatus}: { routeStatus: string }) {
 
           const approval = await getIsApproved(address || '');
           setIsApproved(approval);
+          setSuccessMessage('Successfully Approved');
         }
         if (routeStatus === 'LIVE') {
           const orderSignature = await getOrderSignature(address);
@@ -193,9 +195,15 @@ export default function Home({routeStatus}: { routeStatus: string }) {
             mintState === 'LIVE' ? vaultAmount : 0,
             mintState === 'LIVE' ? FCFSAmount : 0,
           );
-          await updateAccount();
+          setSuccessMessage('Successfully Reserved');
         }
+        await updateAccount();
         setStep1Status('completed');
+        if (routeStatus !== 'LIVE') {
+          setTimeout(() => {
+            setStep1Status('initial');
+          }, 3000);
+        }
       } catch (e: any) {
         console.log(e);
 
@@ -317,6 +325,8 @@ export default function Home({routeStatus}: { routeStatus: string }) {
     );
   }
 
+  console.log('routeStatus--', routeStatus)
+
   function renderStep1() {
     if (step1Status === 'error') {
       return renderError(errorMessage, 'Please Try Again');
@@ -333,7 +343,7 @@ export default function Home({routeStatus}: { routeStatus: string }) {
           <div className="max-w-[100%] relative flex items-center text-center w-[800px]">
             <MintTotalBigBackdrop className="mx-auto"/>
             <h2 className="absolute top-[5px] w-[100%] text-[38px] md:text-[64px] text-white whitespace-nowrap mx-auto">
-              Successfully Reserved
+              {successMessage}
             </h2>
           </div>
         </div>
@@ -372,7 +382,8 @@ export default function Home({routeStatus}: { routeStatus: string }) {
           <Delimeter className="max-w-[100%] my-[16px]"/>
         </>
         }
-        <div className={`flex row items-center justify-between ${(routeStatus === 'NOT_LIVE' || maxVaultMint <= 0) && 'disabled'}`}>
+        <div
+          className={`flex row items-center justify-between ${(routeStatus === 'NOT_LIVE' || maxVaultMint <= 0) && 'disabled'}`}>
           <div className="flex flex-col">
             <span className="text-[42px]">Vault List</span>
             <span className="text-[20px] mt-[-16px]">available: {maxVaultMint}</span>
@@ -385,7 +396,8 @@ export default function Home({routeStatus}: { routeStatus: string }) {
           />
         </div>
         <Delimeter className="max-w-[100%] my-[16px]"/>
-        <div className={`flex row items-center justify-between ${(routeStatus === 'NOT_LIVE' || maxFCFSMint <= 0) && 'disabled'}`}>
+        <div
+          className={`flex row items-center justify-between ${(routeStatus === 'NOT_LIVE' || maxFCFSMint <= 0) && 'disabled'}`}>
           <div className="flex flex-col">
             <span className="text-[42px]">FCFS</span>
             <span className="text-[20px] mt-[-16px]">available: {maxFCFSMint}</span>
