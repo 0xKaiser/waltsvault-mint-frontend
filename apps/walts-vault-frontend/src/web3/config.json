@@ -5,5 +5,5 @@
   "chainID": 5,
   "network": "Goerli Testnet",
   "PROJECT_ID": "906c2930e2f71964ff0b518b5036776f",
-  "rpcProvider": "https://mainnet.infura.io/v3/d74279f9a2b64f0b81547c4452fc5850"
+  "rpcProvider": "https://eth-goerli.g.alchemy.com/v2/0aQmwMwZBjX6De1lQ30jUZXlGBpuuvrX"
 }
