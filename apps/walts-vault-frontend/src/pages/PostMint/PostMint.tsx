@@ -214,7 +214,11 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
     setReservations(usedReservationsFCFS + usedReservationsVL);
 
     // Refund Amount
-    setRefundAmount((usedReservationsVL + usedReservationsFCFS) - signature.refund[1]);
+    if(signature.refund !== undefined){
+      setRefundAmount((usedReservationsVL + usedReservationsFCFS) - signature.refund[1]);
+    }else{
+      setRefundAmount(0)
+    }
   };
 
   const accountSetup = async () => {
