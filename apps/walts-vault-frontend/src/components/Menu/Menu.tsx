@@ -11,19 +11,18 @@ import {Link, NavLink, useLocation, useNavigate} from 'react-router-dom';
 import configs from '../../web3/config.json';
 
 export default function Menu({
-                               mintState,
                                isMintPeriod,
                                isPostMintPeriod,
                              }: {
-  mintState?:string;
+  mintState?: string;
   isMintPeriod?: boolean;
   isPostMintPeriod?: boolean;
 }) {
   const {isMobile, isDesktop} = useBreakpoints();
   const [isModalOpened, setIsModalOpened] = useState(false);
   const {pathname} = useLocation();
-  const navigate =useNavigate()
-  const isMintPage = pathname === '/mint' || pathname === '/post-mint' || pathname === '/mintInfo';
+  const navigate = useNavigate()
+  const isMintPage = pathname === '/mint' || pathname === '/claim-and-refund';
 
   useEffect(() => {
     setIsModalOpened(false);
@@ -35,23 +34,21 @@ export default function Menu({
 
   function renderSubpageLinks() {
     const PAGE_ROUTE_WITH_MINT = Object.values(PAGE_ROUTE);
-    if (mintState === 'NOT_LIVE') {
-      PAGE_ROUTE_WITH_MINT.push({path: '/mintInfo', name: 'Mint Info', backdrop: VwBackdrop});
-    } else {
-      if (isMintPeriod) {
-        PAGE_ROUTE_WITH_MINT.push({path: '/mint', name: 'Mint', backdrop: VwBackdrop});
-      }
-      if (isPostMintPeriod) {
-        PAGE_ROUTE_WITH_MINT.push({path: '/post-mint', name: 'Claim / Refund', backdrop: VwBackdrop});
-      }
+
+    if (isMintPeriod) {
+      PAGE_ROUTE_WITH_MINT.push({path: '/mint', name: 'Mint', backdrop: VwBackdrop});
     }
-    const handleCheckPath=(path:any)=>{
-      console.log('path----',path)
+    if (isPostMintPeriod) {
+      PAGE_ROUTE_WITH_MINT.push({path: '/claim-and-refund', name: 'Claim / Refund', backdrop: VwBackdrop});
+    }
+    const handleCheckPath = (path: any) => {
+      console.log('path----', path)
       navigate(path)
     }
 
     return Object.values(PAGE_ROUTE_WITH_MINT).map(({path, name, backdrop: Backdrop}) => (
-      <a onClick={()=>handleCheckPath(path)} key={path} className="relative flex justify-center items-center z-100 mx-[-8px] link">
+      <a onClick={() => handleCheckPath(path)} key={path}
+         className="relative flex justify-center items-center z-100 mx-[-8px] link">
         {Backdrop && (
           <Backdrop
             className={`cover ${pathname !== path ? 'opacity-0' : ''} w-max h-max min-w-[250px] md:min-w-[0]`}
@@ -83,7 +80,7 @@ export default function Menu({
           <div className="flex flex-col w-full flex-1 items-start justify-start gap-7 py-16">
             {renderSubpageLinks()}
           </div>
-          <div className="absolute bottom-4 flex flex-row w-full justify-center">
+          <div className="absolute bottom-8 flex flex-row w-full justify-end">
             <SocialIcons/>
           </div>
         </Modal>

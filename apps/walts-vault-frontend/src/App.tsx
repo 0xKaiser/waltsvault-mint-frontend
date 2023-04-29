@@ -26,17 +26,14 @@ function App() {
       console.log('mintStatus----', mintStatus)
       console.log('fetched')
       if (mintStatus.length) {
-        if (mintStatus === 'LIVE' && (location.pathname === '/mintInfo' || location.pathname === '/post-mint')) {
+        if ((mintStatus === 'LIVE' || mintStatus === 'NOT_LIVE') && (location.pathname === '/claim-and-refund')) {
           navigate('/mint')
         }
-        if ((mintStatus === 'OVER' || mintStatus === 'REFUND') && (location.pathname === '/mint' || location.pathname === '/mintInfo')) {
-          navigate('/post-mint')
-        }
-        if (mintStatus === 'NOT_LIVE' && (location.pathname === '/mint' || location.pathname === '/post-mint')) {
-          navigate('/mintInfo')
+        if ((mintStatus === 'OVER' || mintStatus === 'REFUND') && (location.pathname === '/mint')) {
+          navigate('/claim-and-refund')
         }
       }
-      setIsMintPeriod(mintStatus === 'LIVE');
+      setIsMintPeriod(mintStatus === 'LIVE' || mintStatus === 'NOT_LIVE');
       setIs24HPostMintPeriod(mintStatus === 'OVER');
       setIsPostMintPeriod(mintStatus === 'REFUND' || mintStatus === 'OVER');
     })();
@@ -46,9 +43,9 @@ function App() {
     <Routes>
       <Route path="*" element={<Home mintState={mintState} isMintPeriod={isMintPeriod}
                                      isPostMintPeriod={isPostMintPeriod}/>}/>
-      <Route path="/mintInfo" element={mintState === 'NOT_LIVE' ? <MintInfo/> : null}/>
-      <Route path="/mint" element={isMintPeriod ? <Mint/> : null}/>
-      <Route path="/post-mint"
+      {/*<Route path="/mintInfo" element={mintState === 'NOT_LIVE' ? <MintInfo/> : null}/>*/}
+      <Route path="/mint" element={isMintPeriod ? <Mint routeStatus={mintState} /> : null}/>
+      <Route path="/claim-and-refund"
              element={isPostMintPeriod ? <PostMint is24HPostMintPeriod={is24HPostMintPeriod}/> : null}/>
     </Routes>
   );
