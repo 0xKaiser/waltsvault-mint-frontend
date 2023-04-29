@@ -36,7 +36,7 @@ export default function Home({ isMintPeriod, isPostMintPeriod ,mintState}: { isM
           <h4 className="text-white loading w-[120px]">LOADING</h4>
         </div>
       )}
-      <Menu mintState={mintState}  isMintPeriod={isMintPeriod} isPostMintPeriod={isPostMintPeriod} />
+      <Menu  isMintPeriod={isMintPeriod} isPostMintPeriod={isPostMintPeriod} />
       <Table appState={appState} lightOn={lightOn} toggleLight={toggleLight}>
         <AnimatedRoutes>
           <Route

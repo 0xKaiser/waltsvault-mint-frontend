@@ -7,7 +7,7 @@ import Menu from '../../components/Menu';
 import Footer from '../../components/Footer';
 import {ReactComponent as Delimeter} from '../../assets/icons/ic-delimeter.svg';
 
-export default function Home() {
+export default function Home({ isMintPeriod, isPostMintPeriod}: { isMintPeriod: boolean; isPostMintPeriod: boolean; }) {
   return (
     <>
       <div className="h-screen w-screen flex items-center justify-center">
@@ -16,7 +16,7 @@ export default function Home() {
         <video autoPlay className="w-full h-full object-cover object-center" loop muted playsInline>
           <source src={BG_VIDEO} type="video/mp4"/>
         </video>
-        <Menu/>
+        <Menu isMintPeriod={isMintPeriod} isPostMintPeriod={isPostMintPeriod} />
         <div className="cover infoCover flex flex-col gap-4 md:gap-[40px] justify-start md:justify-center items-center">
           <div className="text-[64px] flex justify-center items-center h-[50px]">Mint Info</div>
           <div className='flex flex-col md:flex-row gap-[50px] justify-start md:justify-center items-center h-[100%] md:h-[auto] overflow-y-auto'>

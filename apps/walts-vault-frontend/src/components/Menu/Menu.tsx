@@ -11,11 +11,9 @@ import {Link, NavLink, useLocation, useNavigate} from 'react-router-dom';
 import configs from '../../web3/config.json';
 
 export default function Menu({
-                               mintState,
                                isMintPeriod,
                                isPostMintPeriod,
                              }: {
-  mintState?:string;
   isMintPeriod?: boolean;
   isPostMintPeriod?: boolean;
 }) {
@@ -65,17 +63,17 @@ export default function Menu({
     return (
       <div className="flex flex-row w-full justify-end pt-8 pr-8">
         {!isModalOpened && (
-          <div onClick={onModalClickHandler} aria-hidden="true">
+          <div onClick={onModalClickHandler} aria-hidden="true" className={`${pathname === '/mint-info' && 'black' }`} >
             <IcMenu/>
           </div>
         )}
-        <Modal isOpen={isModalOpened} className="flex flex-col py-7 bg-black overflow-y-scroll">
+        <Modal isOpen={isModalOpened} className="flex flex-col py-7 bg-black overflow-y-scroll z-20">
           <div className="fixed top-4 right-4">
             <button onClick={onModalClickHandler} type="button">
               <IcClose/>
             </button>
           </div>
-          <div className="flex flex-col w-full flex-1 items-start justify-start gap-7 py-16">
+          <div className="flex flex-col w-full flex-1 items-start justify-start py-16">
             {renderSubpageLinks()}
           </div>
           <div className="absolute bottom-8 flex flex-row w-full justify-end">
@@ -89,7 +87,7 @@ export default function Menu({
   function renderDesktopMenu() {
     return (
       <div className="flex flex-row w-full justify-between py-6 px-6">
-        <div className="absolute top-[-160px] left-[-320px] bg-black  w-[1200px] h-[300px] radial-shadow"/>
+        {/*<div className="absolute top-[-160px] left-[-320px] bg-black  w-[1200px] h-[300px] radial-shadow"/>*/}
         <div className="flex relative">{renderSubpageLinks()}</div>
         <div className="ml-10 flex items-center">
           <SocialIcons/>

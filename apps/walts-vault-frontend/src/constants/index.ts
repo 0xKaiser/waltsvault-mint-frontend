@@ -41,6 +41,11 @@ export const PAGE_ROUTE = {
     name: 'Team',
     backdrop: TeamBackdrop,
   },
+  mintInfo: {
+    path: '/mint-info',
+    name: 'Mint Info',
+    backdrop: VwBackdrop,
+  },
 };
 
 export const SOCIAL_MEDIA_LINKS = [

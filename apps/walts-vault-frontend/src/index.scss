@@ -97,6 +97,12 @@ button {
   }
 }
 
+.black{
+  svg> path{
+    fill: black;
+  }
+}
+
 button.w3m-icon-right{
   background-color: red !important;
 }
