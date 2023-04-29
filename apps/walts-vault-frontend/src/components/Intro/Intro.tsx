@@ -106,11 +106,6 @@ export default function Intro() {
           <EnterDecoration />
         </div>
       </div>
-      {isLoading && (
-        <div className="cover flex justify-center items-center bg-black">
-          <h4 className="text-white">LOADING...</h4>
-        </div>
-      )}
     </div>
   );
 }
