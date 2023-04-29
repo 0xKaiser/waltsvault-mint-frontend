@@ -14,7 +14,7 @@ export default function Footer() {
   const [isMuted, setIsMuted] = useState(Sound.getIsMuted());
   const { isTabActive } = useActiveTabDetector();
   const { pathname } = useLocation();
-  const isMintPage = pathname === '/mint' || pathname === '/post-mint' || pathname === '/mintInfo';
+  const isMintPage = pathname === '/mint' || pathname === '/claim-and-refund';
 
   useLayoutEffect(() => {
     Sound.setMute(isMuted);

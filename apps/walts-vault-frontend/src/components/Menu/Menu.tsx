@@ -23,7 +23,7 @@ export default function Menu({
   const [isModalOpened, setIsModalOpened] = useState(false);
   const {pathname} = useLocation();
   const navigate =useNavigate()
-  const isMintPage = pathname === '/mint' || pathname === '/post-mint' || pathname === '/mintInfo';
+  const isMintPage = pathname === '/mint' || pathname === '/claim-and-refund';
 
   useEffect(() => {
     setIsModalOpened(false);
@@ -35,15 +35,11 @@ export default function Menu({
 
   function renderSubpageLinks() {
     const PAGE_ROUTE_WITH_MINT = Object.values(PAGE_ROUTE);
-    if (mintState === 'NOT_LIVE') {
-      PAGE_ROUTE_WITH_MINT.push({path: '/mintInfo', name: 'Mint Info', backdrop: VwBackdrop});
-    } else {
-      if (isMintPeriod) {
-        PAGE_ROUTE_WITH_MINT.push({path: '/mint', name: 'Mint', backdrop: VwBackdrop});
-      }
-      if (isPostMintPeriod) {
-        PAGE_ROUTE_WITH_MINT.push({path: '/post-mint', name: 'Claim / Refund', backdrop: VwBackdrop});
-      }
+    if (isMintPeriod) {
+      PAGE_ROUTE_WITH_MINT.push({path: '/mint', name: 'Mint', backdrop: VwBackdrop});
+    }
+    if (isPostMintPeriod) {
+      PAGE_ROUTE_WITH_MINT.push({path: '/claim-and-refund', name: 'Claim / Refund', backdrop: VwBackdrop});
     }
     const handleCheckPath=(path:any)=>{
       navigate(path)

@@ -31,7 +31,7 @@ import {
 import {getOrderSignature, getRefundSignature} from '../../utils/backendApi';
 import Counter from 'components/Counter/Counter';
 
-export default function Home() {
+export default function Home({routeStatus}: { routeStatus: string }) {
   const {isConnected, address, status} = useAccount();
   const {open} = useWeb3Modal();
   const {chain} = useNetwork();
@@ -134,7 +134,7 @@ export default function Home() {
     const totalAllocatedSpots = selectedRD + lockedTokens + vaultData.allocatedSpots;
     const maxReservations = totalAllocatedSpots * vaultData.reservationPerSpot;
     const maxMint = maxReservations - vaultData.usedReservations;
-    if (maxMint <= vaultAmount) {
+    if (maxMint < vaultAmount) {
       setVaultAmount(0)
     } else {
       setMaxVaultMint(maxMint);
@@ -183,16 +183,18 @@ export default function Home() {
           const approval = await getIsApproved(address || '');
           setIsApproved(approval);
         }
-        const orderSignature = await getOrderSignature(address);
-        await placeOrder(
-          address,
-          Number(mintPrice),
-          selectedTokens,
-          orderSignature.signature,
-          mintState === 'LIVE' ? vaultAmount : 0,
-          mintState === 'LIVE' ? FCFSAmount : 0,
-        );
-        await updateAccount();
+        if (routeStatus === 'LIVE') {
+          const orderSignature = await getOrderSignature(address);
+          await placeOrder(
+            address,
+            Number(mintPrice),
+            selectedTokens,
+            orderSignature.signature,
+            mintState === 'LIVE' ? vaultAmount : 0,
+            mintState === 'LIVE' ? FCFSAmount : 0,
+          );
+          await updateAccount();
+        }
         setStep1Status('completed');
       } catch (e: any) {
         console.log(e);
@@ -370,7 +372,7 @@ export default function Home() {
           <Delimeter className="max-w-[100%] my-[16px]"/>
         </>
         }
-        <div className={`flex row items-center justify-between ${maxVaultMint <= 0 && 'disabled'}`}>
+        <div className={`flex row items-center justify-between ${(routeStatus === 'NOT_LIVE' || maxVaultMint <= 0) && 'disabled'}`}>
           <div className="flex flex-col">
             <span className="text-[42px]">Vault List</span>
             <span className="text-[20px] mt-[-16px]">available: {maxVaultMint}</span>
@@ -383,7 +385,7 @@ export default function Home() {
           />
         </div>
         <Delimeter className="max-w-[100%] my-[16px]"/>
-        <div className={`flex row items-center justify-between ${maxFCFSMint <= 0 && 'disabled'}`}>
+        <div className={`flex row items-center justify-between ${(routeStatus === 'NOT_LIVE' || maxFCFSMint <= 0) && 'disabled'}`}>
           <div className="flex flex-col">
             <span className="text-[42px]">FCFS</span>
             <span className="text-[20px] mt-[-16px]">available: {maxFCFSMint}</span>
@@ -402,12 +404,12 @@ export default function Home() {
             no. of mints: {selectedTokens.length + vaultAmount + FCFSAmount}
           </div>
           <div
-            className="text-[32px] text-white leading-[47px] mx-auto mt-[-27px] z-10">Price: {((vaultAmount + FCFSAmount) * Number(mintPrice)).toFixed(5)} eth
+            className="text-[32px] text-white leading-[47px] mx-auto mt-[-27px] z-10">Price: {parseFloat(((vaultAmount + FCFSAmount) * Number(mintPrice)).toFixed(5))} eth
           </div>
         </div>
         <div className="flex flex-col items-center">
           <div
-            className={`flex flex-row items-center ${(selectedTokens.length + vaultAmount + FCFSAmount) <= 0 && 'disabled'}`}>
+            className={`flex flex-row items-center ${isApproved && routeStatus === 'NOT_LIVE' && 'disabled'}  ${(selectedTokens.length + vaultAmount + FCFSAmount) <= 0 && 'disabled'}`}>
             <EnterDecorationBlack className="w-[33px]"/>
             <button className="px-3" type="button" onClick={mintHandler}>
               <h1
