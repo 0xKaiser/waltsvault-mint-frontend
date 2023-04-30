@@ -1,8 +1,9 @@
-import {ethers, utils} from 'ethers';
-import {Provider, Contract} from 'ethers-multicall';
+import { ethers, utils } from 'ethers';
+import { Provider, Contract } from 'ethers-multicall';
 
 import config from './config.json';
-import abi from './abi.json';
+import abi from './mintControllerAbi.json';
+import vaultAbi from './vaultAbi.json';
 import ravendaleAbi from './ravendaleAbi.json';
 
 let ethcallProvider: Provider, contract: ethers.Contract,
@@ -12,7 +13,7 @@ export const providerHandler = async (signer: any, provider: any) => {
   ethcallProvider = new Provider(provider);
   await ethcallProvider.init();
 
-  contract = new ethers.Contract(config.contractAddress, abi, signer);
+  contract = new ethers.Contract(config.mintControllerContractAddress, abi, signer);
   ravendaleContract = new ethers.Contract(config.ravendaleContractAddress, ravendaleAbi, signer);
 
   return true;
@@ -20,7 +21,7 @@ export const providerHandler = async (signer: any, provider: any) => {
 
 export const providerHandlerReadOnly = async () => {
   const provider = new ethers.providers.JsonRpcProvider(config.rpcProvider);
-  contract = new ethers.Contract(config.contractAddress, abi, provider);
+  contract = new ethers.Contract(config.mintControllerContractAddress, abi, provider);
 };
 
 export const getRavendaleTokens = async (address: string) => {
@@ -80,66 +81,85 @@ export const getRavendaleTokens = async (address: string) => {
   }
 };
 
-export const getState = async () => {
-  const n = await contract.state();
+export const getMintTime = async () => {
+  const multicallContract = new Contract(config.mintControllerContractAddress, abi);
 
-  switch (n) {
-    default:
-      return 'NOT_LIVE';
-    case 0:
-      return 'NOT_LIVE';
-    case 1:
-      return 'LIVE';
-    case 2:
-      return 'OVER';
-    case 3:
-      return 'REFUND';
+  const multicallArray = [
+    multicallContract.START_TIME_RD(),
+    multicallContract.END_TIME_RD(),
+    multicallContract.START_TIME_VL(),
+    multicallContract.END_TIME_VL(),
+    multicallContract.START_TIME_PUBLIC(),
+    multicallContract.END_TIME_PUBLIC()
+  ];
+
+  const resultArray = await ethcallProvider.all(multicallArray);
+
+  const mintTimes = {
+    START_RD: resultArray[0],
+    END_RD: resultArray[1],
+    START_VL: resultArray[2],
+    END_VL: resultArray[3],
+    START_PUBLIC: resultArray[4],
+    END_PUBLIC: resultArray[5],
   }
+
+  return mintTimes;
+}
+
+export const getMintsPerRD = async () => {
+  const n = await contract.MAX_MINTS_PER_TOKEN_RD();
+  return n;
 };
 
 export const getResSpotVL = async () => {
-  const n = await contract.MAX_RES_PER_ADDR_VL();
-  return n.toNumber();
+  const n = await contract.MAX_MINTS_PER_SPOT_VL();
+  return n;
 };
 
 export const getResSpotFCFS = async () => {
-  const n = await contract.MAX_RES_PER_ADDR_FCFS();
-  return n.toNumber();
+  const n = await contract.MAX_MINTS_PER_ADDR_PUBLIC();
+  return n;
 };
 
 export const getUsedResVL = async (address: string) => {
-  const n = await contract.resByAddr_VL(address);
+  const n = await contract.vlMintsBy(address);
   return n.toNumber();
 };
 
 export const getUsedResFCFS = async (address: string) => {
-  const n = await contract.resByAddr_FCFS(address);
+  const n = await contract.publicMintsBy(address);
   return n.toNumber();
 };
 
+export const getMaxAmountForSale = async () => {
+  const n = await contract.MAX_AMOUNT_FOR_SALE();
+  return n;
+}
+
+export const getAmountSold = async () => {
+  const n = await contract.amountSold();
+  return n;
+}
+
 export const getMintPrice = async () => {
-  const n = await contract.PRICE_PER_RES();
+  const n = await contract.PRICE();
   return utils.formatEther(n.toString());
 };
 
 export const getIsApproved = async (address: string) => {
-  const n = await ravendaleContract.isApprovedForAll(address, config.contractAddress);
-  return n;
-};
-
-export const getClaimedRefund = async (address: string) => {
-  const n = await contract.hasClaimedRefund(address);
+  const n = await ravendaleContract.isApprovedForAll(address, config.mintControllerContractAddress);
   return n;
 };
 
 // Write Functions
 export const setApproval = async () => {
-  const n = await ravendaleContract.setApprovalForAll(config.contractAddress, true);
+  const n = await ravendaleContract.setApprovalForAll(config.mintControllerContractAddress, true);
   await n.wait();
   return n;
 };
 
-export const placeOrder = async (account: any, price: number, tokensToLock: number[], signature: any[], amountVL: number, amountFCFS: number) => {
+export const placeOrder = async (account: any, price: number, tokensToLock: number[], signature: any[], amountRD: number, amountVL: number, amountFCFS: number) => {
 
   let signer;
   if (amountVL <= 0 || signature === undefined) {
@@ -153,19 +173,14 @@ export const placeOrder = async (account: any, price: number, tokensToLock: numb
     signer = signature;
   }
 
-  const n = await contract.placeOrder(
-    tokensToLock,
-    signer,
+  const n = await contract.mint(
+    amountRD,
     amountVL,
     amountFCFS,
-    {value: utils.parseEther(((amountVL + amountFCFS) * price).toFixed(5).toString())},
+    tokensToLock,
+    signer,
+    { value: utils.parseEther(((amountVL + amountFCFS) * price).toFixed(5).toString()) },
   );
-  await n.wait();
-  return n;
-};
-
-export const refund = async (signature: any[]) => {
-  const n = await contract.claimRefund(signature);
   await n.wait();
   return n;
 };

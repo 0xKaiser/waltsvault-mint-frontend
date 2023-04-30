@@ -35,10 +35,10 @@ export default function Menu({
   function renderSubpageLinks() {
     const PAGE_ROUTE_WITH_MINT = Object.values(PAGE_ROUTE);
     
-    if (isMintPeriod) {
+    if (isMintPeriod || true) {
       PAGE_ROUTE_WITH_MINT.push({path: '/mint', name: 'Mint', backdrop: VwBackdrop});
     }
-    if (isPostMintPeriod) {
+    if (isPostMintPeriod || false) {
       PAGE_ROUTE_WITH_MINT.push({path: '/claim-and-refund', name: 'Claim / Refund', backdrop: VwBackdrop});
     }
     const handleCheckPath = (path: any) => {

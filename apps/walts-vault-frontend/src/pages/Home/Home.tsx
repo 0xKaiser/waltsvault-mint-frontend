@@ -11,7 +11,7 @@ import Vision from 'pages/Vision';
 import React, { useMemo, useState } from 'react';
 import { Navigate, Route, useLocation } from 'react-router-dom';
 
-export default function Home({ isMintPeriod, isPostMintPeriod ,mintState}: { isMintPeriod: boolean; isPostMintPeriod: boolean; mintState: string }) {
+export default function Home({ isMintPeriod, isPostMintPeriod}: { isMintPeriod: boolean; isPostMintPeriod: boolean; }) {
   const [zoomIn, setZoomIn] = useState(false);
   const [lightOn, setLightsOn] = useState(false);
   const { pathname } = useLocation();
@@ -31,12 +31,12 @@ export default function Home({ isMintPeriod, isPostMintPeriod ,mintState}: { isM
 
   return (
     <div className="h-screen w-screen">
-      { mintState.length === 0 && (
+      {/* { mintState.length === 0 && (
         <div className="cover flex justify-center items-center bg-[rgba(0,0,0,1)] z-20">
           <h4 className="text-white loading w-[120px]">LOADING</h4>
         </div>
-      )}
-      <Menu  isMintPeriod={isMintPeriod} isPostMintPeriod={isPostMintPeriod} />
+      )} */}
+      <Menu isMintPeriod={isMintPeriod} isPostMintPeriod={isPostMintPeriod} />
       <Table appState={appState} lightOn={lightOn} toggleLight={toggleLight}>
         <AnimatedRoutes>
           <Route

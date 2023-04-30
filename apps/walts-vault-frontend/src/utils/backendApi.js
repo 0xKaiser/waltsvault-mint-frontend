@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const BASE_URL = "https://waltsvaultmint.0xytocin.online/signer/";
+const BASE_URL = "https://waltsvault-be-new-jfmdh.ondigitalocean.app/signer/unique";
 
 export const getOrderSignature = async (address) => {
   try {
-    const { data } = await axios.post(BASE_URL + "order", { address: address });
+    const { data } = await axios.post(BASE_URL, { address: address });
     return data;
   } catch (err) {
     return false;
