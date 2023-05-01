@@ -1,8 +1,8 @@
 {
   "vaultContractAddress": "0xDa67FD1Cb01a81dADec6727b9D0B74a8F2Dc1437",
   "mintControllerContractAddress": "0xE4B1903789c0CCE595A47A1dC921874DcF656F5f",
-  "ravendaleContractAddress": "0xBeb297284e6D4E5b020e200C99E93400f21b2Cd7",
-  "chainID": 5,
+  "ravendaleContractAddress": "0xf83A99E084C1D575AF8e12FF492F5E6C7b768b48",
+  "chainID": 1,
   "network": "Goerli Testnet",
   "PROJECT_ID": "906c2930e2f71964ff0b518b5036776f",
   "rpcProvider": "https://eth-goerli.g.alchemy.com/v2/0aQmwMwZBjX6De1lQ30jUZXlGBpuuvrX"
