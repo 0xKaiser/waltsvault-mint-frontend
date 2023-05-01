@@ -42,8 +42,8 @@ export const PAGE_ROUTE = {
     backdrop: TeamBackdrop,
   },
   mintInfo: {
-    path: '/mint-info',
-    name: 'Mint Info',
+    path: '/wallet-checker',
+    name: 'Wallet Checker',
     backdrop: VwBackdrop,
   },
 };

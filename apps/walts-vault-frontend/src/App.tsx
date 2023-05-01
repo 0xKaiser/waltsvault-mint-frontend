@@ -5,6 +5,7 @@ import MintInfo from 'pages/MintInfo';
 import React, {useEffect, useState} from 'react';
 import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import './index.css';
+import WalletCheck from 'pages/WalletCheck/WalletCheck';
 
 function App() {
   const [isMintPeriod, setIsMintPeriod] = useState(false); // <=24H since mint started
@@ -40,7 +41,7 @@ function App() {
     <Routes>
       <Route path="*" element={<Home isMintPeriod={isMintPeriod} isPostMintPeriod={isPostMintPeriod}/>}/>
 
-      <Route path="/mint-info" element={<MintInfo isMintPeriod={isMintPeriod} isPostMintPeriod={isPostMintPeriod}/>}/>
+      <Route path="/wallet-checker" element={<WalletCheck />}/>
 
       <Route path="/mint" element={<Mint />}/>
 
