@@ -179,7 +179,7 @@ export const placeOrder = async (account: any, price: number, tokensToLock: numb
     amountFCFS,
     tokensToLock,
     signer,
-    { value: utils.parseEther(((amountVL + amountFCFS) * price).toFixed(5).toString()) },
+    { value: utils.parseEther(parseFloat(((amountRD + amountVL + amountFCFS) * price).toFixed(5)).toString()) },
   );
   await n.wait();
   return n;
