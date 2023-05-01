@@ -31,7 +31,7 @@ import {
   providerHandler,
   setApproval,
 } from '../../web3/contractInteraction';
-import { getOrderSignature, getRefundSignature } from '../../utils/backendApi';
+import { getOrderSignature } from '../../utils/backendApi';
 import Counter from 'components/Counter/Counter';
 
 export default function Home() {
@@ -208,7 +208,7 @@ export default function Home() {
       setStep(0);
       setStep0Status('initial');
     }
-  });
+  }, [isConnected]);
 
   const checkMintState = async () => {
     const mintTimes = await getMintTime();
@@ -226,9 +226,6 @@ export default function Home() {
       setMintState('PUBLIC');
       console.log('Mint/checkMintState~ mintState: ', mintState);
     }
-
-    setMintState('NOT_LIVE');
-    console.log('Mint/checkMintState~ mintState (overridden): ', mintState);
   };
 
   const updateAccount = async () => {
@@ -283,15 +280,13 @@ export default function Home() {
     // Check approval
     if (ravendale.length > 0) {
       const approval = await getIsApproved(address || '');
-      // setIsApproved(approval);
-      setIsApproved(true);
+      setIsApproved(approval);
     } else {
       setIsApproved(true);
     }
 
     // Get Vault List + Ravendale Mint Data
-    // const allocatedSpots = orderSignature ? orderSignature.signature[1] : 0;
-    const allocatedSpots = 2;
+    const allocatedSpots = orderSignature ? orderSignature.signature[1] : 0;
     console.log('Mint/accoutnSetup~ [account] allocatedSpots: ', allocatedSpots);
 
     const mintsPerRDToken = await getMintsPerRD();
@@ -300,8 +295,7 @@ export default function Home() {
     const reservationPerSpot = await getResSpotVL();
     console.log('Mint/accoutnSetup~ reservationPerSpot: ', reservationPerSpot);
 
-    // const usedReservationsVL = await getUsedResVL(address || '');
-    const usedReservationsVL = 0;
+    const usedReservationsVL = await getUsedResVL(address || '');
     console.log('Mint/accoutnSetup~ [account] usedReservationsVL: ', usedReservationsVL);
 
     setVaultData({
@@ -315,8 +309,7 @@ export default function Home() {
     const reservationPerUser = await getResSpotFCFS();
     console.log('Mint/accoutnSetup~ reservationPerUser: ', reservationPerUser);
 
-    // const usedReservationsFCFS = await getUsedResFCFS(address || '');
-    const usedReservationsFCFS = 2;
+    const usedReservationsFCFS = await getUsedResFCFS(address || '');
     console.log('Mint/accoutnSetup~ [account] usedReservationsFCFS: ', usedReservationsFCFS);
 
     setMaxFCFSMint(reservationPerUser - usedReservationsFCFS);
@@ -331,7 +324,6 @@ export default function Home() {
     console.log('Mint/accoutnSetup~ maxSupply: ', maxSupply);
     console.log('Mint/accoutnSetup~ amountSold: ', amountSold);
     setAvailableSupply(maxSupply - amountSold);
-    // setAvailableSupply(0);
 
     setVaultAmount(0);
     setFCFSAmount(0);
@@ -366,54 +358,6 @@ export default function Home() {
     );
   }
 
-  function renderRavendaleNotLive() {
-    return (
-      <>
-        {ravendaleTokens.length > 0 && mintState !== 'NOT_LIVE' && (
-          <>
-            <div className="flex flex-col md:flex-row justify-start md:justify-between">
-              {/*<div className={`flex flex-col ${mintState === 'NOT_LIVE' && 'disabled'}`}>*/}
-              <div className={`flex flex-col `}>
-                <span className="text-[42px]">Ravendale</span>
-                <span className={`text-[20px] mt-[-16px]`}>
-                  {mintState === 'NOT_LIVE' ? 'Tokens in your Wallet' : 'Select Tokens from Wallet'}
-                </span>
-              </div>
-              <div className="w-[280px] scrollbar-hide flex flex-wrap gap-[12px] md:self-center max-h-[102px] overflow-y-auto">
-                {ravendaleTokens.map(token => (
-                  <div
-                    key={token.tokenId}
-                    className={`
-                      w-[43px] h-[43px] flex items-center justify-center cursor-pointer
-                      ${
-                        selectedTokens.includes(token.tokenId)
-                          ? 'border-2 border-black'
-                          : token.locked || mintState === 'NOT_LIVE'
-                          ? 'border border-gray-400 border-opacity-50'
-                          : 'border border-gray-400 '
-                      } 
-                      ${selectedTokens.includes(token.tokenId) || token.locked ? '' : 'hover'}
-                    `}
-                    onClick={() => {
-                      if (!token.locked && mintState !== 'NOT_LIVE') toggleSelect(token.tokenId);
-                    }}>
-                    <span
-                      className={`text-[20px] ${
-                        (token.locked || mintState === 'NOT_LIVE') && 'text-[gray] text-opacity-50'
-                      }`}>
-                      {token.tokenId}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <Delimeter className="max-w-[100%] my-[10px] " />
-          </>
-        )}
-      </>
-    );
-  }
-
   function renderStep1() {
     if (step1Status === 'error') {
       return renderError(errorMessage, 'Please Try Again');
@@ -436,58 +380,6 @@ export default function Home() {
         </div>
       );
     }
-
-    
-    if (mintState === 'NOT_LIVE') {
-      return (
-        <div className="flex flex-col items-center max-w-[90vw] my-14 animation">
-          {vaultData.allocatedSpots > 0 ? (
-            <>
-              <Palette />
-              <br />
-              <div className="max-w-[100%] relative flex items-center text-center w-[600px]">
-                <MintTotalBigBackdrop className="mx-auto" />
-                <h2 className="absolute top-[5px] w-[100%] text-[38px] md:text-[44px] text-white whitespace-nowrap mx-auto">
-                  Hey, you've got {vaultData.allocatedSpots} Vault List spot{vaultData.allocatedSpots > 1 ? 's!' : '!'}
-                </h2>
-              </div>
-            </>
-          ) : (
-            <>
-              <BrokenPencilBlack />
-              <br />
-              <div className="max-w-[100%] relative flex items-center text-center w-[600px]">
-                <MintErrorBackdrop className="max-w-[100vw] mx-auto" />
-                <h2 className="absolute top-[5px] w-[100%] text-[38px] md:text-[44px] text-white whitespace-nowrap mx-auto">
-                  Sorry, you are not on the Vault List
-                </h2>
-              </div>
-            </>
-          )}
-        </div>
-      )
-    }
-/*
-    if (mintState === 'LIVE') {
-      return<>{
-        availableSupply <= 0 
-        ? renderSoldOut() 
-        : ravendaleTokens.length > 0 
-        ? vaultData.allocatedSpots > 0 
-        ? renderRavendaleAndVault() 
-        : renderRavendaleLive() 
-        : vaultData.allocatedSpots > 0 
-        ? renderVault() 
-        : renderGeneral()
-      }</>;
-  }
-
-    if (mintState === 'PUBLIC'){
-      return <>{
-        ravendaleTokens.length > 0 ? 
-      }</>
-    }
-    */
 
     if (
       ravendaleTokens.length > 0 ||
@@ -543,7 +435,6 @@ export default function Home() {
           {mintState !== 'PUBLIC' && availableSupply > 0 && 
           (ravendaleTokens.length > 0 || maxVaultMint > 0) && (
             <>
-              {/*(mintState === 'NOT_LIVE' || maxVaultMint <= 0) && 'disabled'*/}
               <div
                 className={`flex row items-center justify-between ${
                   (mintState === 'NOT_LIVE' && maxVaultMint <= 0) && 'hidden'
@@ -636,9 +527,7 @@ export default function Home() {
         </div>
       );
     } else {
-      {
-        /* Static message display */
-      }
+      {/* Static message display */}
       return (
         <div className="flex flex-col items-center max-w-[90vw] animation">
           <Palette />
@@ -651,8 +540,6 @@ export default function Home() {
                 ? 'All Sold Out!'
                 : mintState === 'PUBLIC'
                 ? 'You have already minted 2'
-                : mintState === 'NOT_LIVE'
-                ? 'No Vault List spots detected'
                 : 'Please wait for Public mint to begin'}
             </h2>
           </div>

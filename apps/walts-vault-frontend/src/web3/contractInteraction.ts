@@ -32,20 +32,20 @@ export const getRavendaleTokens = async (address: string) => {
     const userBalance = await ravendaleContract.balanceOf(address).then((res: ethers.BigNumber) => {
       return res.toNumber();
     });
-    const lockedTokens = await contract.getTokensLockedByAddr(address).then((res: ethers.BigNumber[]) => {
-      const tokens: number[] = [];
-      res.forEach(token => tokens.push(token.toNumber()));
-      return tokens;
-    });
+    // const lockedTokens = await contract.getTokensLockedByAddr(address).then((res: ethers.BigNumber[]) => {
+    //   const tokens: number[] = [];
+    //   res.forEach(token => tokens.push(token.toNumber()));
+    //   return tokens;
+    // });
 
-    let userTokens = [];
+    let userTokens :any[] = [];
 
-    for (let i = 0; i < lockedTokens.length; i++) {
-      userTokens.push({
-        tokenId: lockedTokens[i],
-        locked: true,
-      });
-    }
+    // for (let i = 0; i < lockedTokens.length; i++) {
+    //   userTokens.push({
+    //     tokenId: lockedTokens[i],
+    //     locked: true,
+    //   });
+    // }
 
     if (userBalance > 0) {
       const multicallContract = new Contract(config.ravendaleContractAddress, ravendaleAbi);
