@@ -14,7 +14,6 @@ import React, {useState, useEffect} from 'react';
 
 import config from '../../web3/config.json';
 import {
-  getClaimedRefund,
   getIsApproved,
   getMintPrice,
   getRavendaleTokens,
@@ -22,7 +21,6 @@ import {
   getUsedResVL,
   placeOrder,
   providerHandler,
-  refund,
   setApproval,
 } from '../../web3/contractInteraction';
 import {getOrderSignature, getRefundSignature} from '../../utils/backendApi';
@@ -135,7 +133,7 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
     setStep3Status('loading');
     try {
       const refundSignature = await getRefundSignature(address);
-      await refund(refundSignature.signature);
+      // await refund(refundSignature.signature);
       await updateAccount();
       setStep3Status('completed');
     } catch (e) {
@@ -159,14 +157,14 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
           setIsApproved(approval);
         }
         const orderSignature = await getOrderSignature(address);
-        await placeOrder(
-          address,
-          Number(mintPrice),
-          selectedTokens,
-          orderSignature.signature,
-          0,
-          0,
-        );
+        // await placeOrder(
+        //   address,
+        //   Number(mintPrice),
+        //   selectedTokens,
+        //   orderSignature.signature,
+        //   0,
+        //   0,
+        // );
         await updateAccount();
         setStep2Status('completed');
       } catch (e: any) {
@@ -198,8 +196,8 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
   });
 
   const updateAccount = async () => {
-    const refunded = await getClaimedRefund(address || '');
-    setClaimedRefund(refunded);
+    // const refunded = await getClaimedRefund(address || '');
+    // setClaimedRefund(refunded);
 
     // Get Ravendale Data
     const ravendale = await getRavendaleTokens(address || '');
@@ -236,8 +234,8 @@ export default function Home({is24HPostMintPeriod}: { is24HPostMintPeriod: boole
       refund: refundSignature.signature,
     });
 
-    const refunded = await getClaimedRefund(address || '');
-    setClaimedRefund(refunded);
+    // const refunded = await getClaimedRefund(address || '');
+    // setClaimedRefund(refunded);
 
     // Get Ravendale Data
     const ravendale = await getRavendaleTokens(address || '');

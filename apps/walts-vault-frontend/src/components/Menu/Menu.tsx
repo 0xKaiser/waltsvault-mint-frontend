@@ -22,7 +22,7 @@ export default function Menu({
   const [isModalOpened, setIsModalOpened] = useState(false);
   const {pathname} = useLocation();
   const navigate = useNavigate()
-  const isMintPage = pathname === '/mint' || pathname === '/claim-and-refund';
+  const isMintPage = pathname === '/mint' || pathname === '/claim-and-refund' || pathname === '/wallet-checker';
 
   useEffect(() => {
     setIsModalOpened(false);
@@ -34,13 +34,13 @@ export default function Menu({
 
   function renderSubpageLinks() {
     const PAGE_ROUTE_WITH_MINT = Object.values(PAGE_ROUTE);
-    
-    if (isMintPeriod) {
-      PAGE_ROUTE_WITH_MINT.push({path: '/mint', name: 'Mint', backdrop: VwBackdrop});
-    }
-    if (isPostMintPeriod) {
-      PAGE_ROUTE_WITH_MINT.push({path: '/claim-and-refund', name: 'Claim / Refund', backdrop: VwBackdrop});
-    }
+
+    // if (isMintPeriod || true) {
+    //   PAGE_ROUTE_WITH_MINT.push({path: '/mint', name: 'Mint', backdrop: VwBackdrop});
+    // }
+    // if (isPostMintPeriod || false) {
+    //   PAGE_ROUTE_WITH_MINT.push({path: '/claim-and-refund', name: 'Claim / Refund', backdrop: VwBackdrop});
+    // }
     const handleCheckPath = (path: any) => {
       console.log('path----', path)
       navigate(path)
