@@ -429,14 +429,14 @@ export default function Home() {
             <>
               <div
                 className={`flex row items-center justify-between 
-                ${mintState === 'LIVE' && maxVaultMint <= 0 && 'disabled'} `}>
+                ${mintState === 'LIVE' && (maxVaultMint + selectedTokens.length) <= 0 && 'disabled'} `}>
                 <div className="flex flex-col">
                   <span className="text-[42px]">Vault List</span>
                   <span
                     className={`text-[20px] mt-[-16px] ${mintState === 'NOT_LIVE' && 'hidden'} ${
-                      mintState === 'LIVE' && maxVaultMint <= 0 && 'disabled'
+                      mintState === 'LIVE' && (maxVaultMint + selectedTokens.length) <= 0 && 'disabled'
                     } `}>
-                    available: {Math.min(maxVaultMint, availableSupply)}
+                    available: {Math.min(maxVaultMint, availableSupply) + (selectedTokens.length * vaultData.mintsPerRD)}
                   </span>
                 </div>
                 {mintState !== 'NOT_LIVE' ? (
