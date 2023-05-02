@@ -6,8 +6,7 @@ import abi from './mintControllerAbi.json';
 import vaultAbi from './vaultAbi.json';
 import ravendaleAbi from './ravendaleAbi.json';
 
-let ethcallProvider: Provider, contract: ethers.Contract,
-  ravendaleContract: ethers.Contract;
+let ethcallProvider: Provider, contract: ethers.Contract, ravendaleContract: ethers.Contract;
 
 export const providerHandler = async (signer: any, provider: any) => {
   ethcallProvider = new Provider(provider);
@@ -38,14 +37,16 @@ export const getRavendaleTokens = async (address: string) => {
     //   return tokens;
     // });
 
-    let userTokens :any[] = [];
+    let userTokens: any[] = [];
 
-    // for (let i = 0; i < lockedTokens.length; i++) {
-    //   userTokens.push({
-    //     tokenId: lockedTokens[i],
-    //     locked: true,
-    //   });
-    // }
+    /* 
+    for (let i = 0; i < lockedTokens.length; i++) {
+      userTokens.push({
+         tokenId: lockedTokens[i],
+         locked: true,
+       });
+     }
+     */
 
     if (userBalance > 0) {
       const multicallContract = new Contract(config.ravendaleContractAddress, ravendaleAbi);
@@ -69,10 +70,10 @@ export const getRavendaleTokens = async (address: string) => {
         i++;
       }
 
-      userTokens.sort((a, b) => (a.tokenId > b.tokenId) ? 1 : -1);
+      userTokens.sort((a, b) => (a.tokenId > b.tokenId ? 1 : -1));
       return userTokens;
     } else {
-      userTokens.sort((a, b) => (a.tokenId > b.tokenId) ? 1 : -1);
+      userTokens.sort((a, b) => (a.tokenId > b.tokenId ? 1 : -1));
       return userTokens;
     }
   } catch (e) {
@@ -90,7 +91,7 @@ export const getMintTime = async () => {
     multicallContract.START_TIME_VL(),
     multicallContract.END_TIME_VL(),
     multicallContract.START_TIME_PUBLIC(),
-    multicallContract.END_TIME_PUBLIC()
+    multicallContract.END_TIME_PUBLIC(),
   ];
 
   const resultArray = await ethcallProvider.all(multicallArray);
@@ -102,10 +103,10 @@ export const getMintTime = async () => {
     END_VL: resultArray[3],
     START_PUBLIC: resultArray[4],
     END_PUBLIC: resultArray[5],
-  }
+  };
 
   return mintTimes;
-}
+};
 
 export const getMintsPerRD = async () => {
   const n = await contract.MAX_MINTS_PER_TOKEN_RD();
@@ -135,12 +136,12 @@ export const getUsedResFCFS = async (address: string) => {
 export const getMaxAmountForSale = async () => {
   const n = await contract.MAX_AMOUNT_FOR_SALE();
   return n;
-}
+};
 
 export const getAmountSold = async () => {
   const n = await contract.amountSold();
   return n;
-}
+};
 
 export const getMintPrice = async () => {
   const n = await contract.PRICE();
@@ -159,8 +160,15 @@ export const setApproval = async () => {
   return n;
 };
 
-export const placeOrder = async (account: any, price: number, tokensToLock: number[], signature: any[], amountRD: number, amountVL: number, amountFCFS: number) => {
-
+export const placeOrder = async (
+  account: any,
+  price: number,
+  tokensToLock: number[],
+  signature: any[],
+  amountRD: number,
+  amountVL: number,
+  amountFCFS: number,
+) => {
   let signer;
   if (amountVL <= 0 || signature === undefined) {
     signer = [
@@ -173,14 +181,9 @@ export const placeOrder = async (account: any, price: number, tokensToLock: numb
     signer = signature;
   }
 
-  const n = await contract.mint(
-    amountRD,
-    amountVL,
-    amountFCFS,
-    tokensToLock,
-    signer,
-    { value: utils.parseEther(parseFloat(((amountRD + amountVL + amountFCFS) * price).toFixed(5)).toString()) },
-  );
+  const n = await contract.mint(amountRD, amountVL, amountFCFS, tokensToLock, signer, {
+    value: utils.parseEther(parseFloat(((amountRD + amountVL + amountFCFS) * price).toFixed(5)).toString()),
+  });
   await n.wait();
   return n;
 };
