@@ -138,6 +138,11 @@ export const getMaxAmountForSale = async () => {
   return n;
 };
 
+export const getMaxAmountForVL = async () => {
+  const n = await contract.AVAILABLE_AMOUNT_FOR_VL();
+  return n;
+};
+
 export const getAmountSold = async () => {
   const n = await contract.amountSold();
   return n;

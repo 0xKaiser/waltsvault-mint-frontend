@@ -19,6 +19,7 @@ import {
   getAmountSold,
   getIsApproved,
   getMaxAmountForSale,
+  getMaxAmountForVL,
   getMintPrice,
   getMintTime,
   getMintsPerRD,
@@ -71,6 +72,7 @@ export default function Home() {
 
   const [mintPrice, setMintPrice] = useState('');
   const [availableSupply, setAvailableSupply] = useState<number>(0);
+  const [availableSupplyVL, setAvailableSupplyVL] = useState(0);
 
   function renderError(title: string, subTitle: string) {
     return (
@@ -135,14 +137,12 @@ export default function Home() {
   };
 
   const getMaxVaultMint = () => {
-    const selectedRD = selectedTokens.length;
-    const totalAllocatedSpots =
-      selectedRD * vaultData.mintsPerRD + vaultData.allocatedSpots * vaultData.reservationPerSpot;
+    const totalAllocatedSpots = vaultData.allocatedSpots * vaultData.reservationPerSpot;
     const maxMint = totalAllocatedSpots - vaultData.usedReservations;
     console.log('Mint/getMaxVaultMint~ maxMint: ', maxMint);
 
-    if (maxMint < vaultAmount) {
-      setVaultAmount(maxMint);
+    if (maxMint + (selectedTokens.length * vaultData.mintsPerRD) < vaultAmount) {
+      setVaultAmount(maxMint + (selectedTokens.length * vaultData.mintsPerRD));
     }
     setMaxVaultMint(maxMint);
   };
@@ -237,6 +237,9 @@ export default function Home() {
     const usedReservationsVL = await getUsedResVL(address || '');
     setVaultData({ ...vaultData, usedReservations: usedReservationsVL });
 
+    const availableVL = await getMaxAmountForVL();
+    setAvailableSupplyVL(availableVL);
+
     // Get FCFS Mint Data
     const reservationPerUser = await getResSpotFCFS();
     const usedReservationsFCFS = await getUsedResFCFS(address || '');
@@ -289,6 +292,9 @@ export default function Home() {
 
     const usedReservationsVL = await getUsedResVL(address || '');
     console.log('Mint/accoutnSetup~ [account] usedReservationsVL: ', usedReservationsVL);
+
+    const availableVL = await getMaxAmountForVL();
+    setAvailableSupplyVL(availableVL);
 
     setVaultData({
       mintsPerRD: mintsPerRDToken,
@@ -436,7 +442,7 @@ export default function Home() {
                 {mintState !== 'NOT_LIVE' ? (
                   <Counter
                     style={0}
-                    maxCount={Math.min(maxVaultMint, availableSupply)}
+                    maxCount={Math.min(maxVaultMint, availableSupplyVL) + (selectedTokens.length * vaultData.mintsPerRD)}
                     count={vaultAmount}
                     setCount={setVaultAmount}
                   />
