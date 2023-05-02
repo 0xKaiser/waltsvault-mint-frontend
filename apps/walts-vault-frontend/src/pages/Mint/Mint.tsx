@@ -141,8 +141,8 @@ export default function Home() {
     const maxMint = totalAllocatedSpots - vaultData.usedReservations;
     console.log('Mint/getMaxVaultMint~ maxMint: ', maxMint);
 
-    if (maxMint + (selectedTokens.length * vaultData.mintsPerRD) < vaultAmount) {
-      setVaultAmount(maxMint + (selectedTokens.length * vaultData.mintsPerRD));
+    if (maxMint + selectedTokens.length * vaultData.mintsPerRD < vaultAmount) {
+      setVaultAmount(maxMint + selectedTokens.length * vaultData.mintsPerRD);
     }
     setMaxVaultMint(maxMint);
   };
@@ -380,7 +380,8 @@ export default function Home() {
     if (
       ravendaleTokens.length > 0 ||
       (availableSupply > 0 &&
-        ((maxVaultMint > 0 && mintState !== 'PUBLIC') || (maxFCFSMint > 0 && mintState === 'PUBLIC')))
+        ((availableSupplyVL > 0 && maxVaultMint > 0 && mintState !== 'PUBLIC') ||
+          (maxFCFSMint > 0 && mintState === 'PUBLIC')))
     ) {
       return (
         <div className="flex flex-col select-none max-w-[90vw] animation">
@@ -429,20 +430,20 @@ export default function Home() {
             <>
               <div
                 className={`flex row items-center justify-between 
-                ${mintState === 'LIVE' && (maxVaultMint + selectedTokens.length) <= 0 && 'disabled'} `}>
+                ${mintState === 'LIVE' && maxVaultMint + selectedTokens.length <= 0 && 'disabled'} `}>
                 <div className="flex flex-col">
                   <span className="text-[42px]">Vault List</span>
                   <span
                     className={`text-[20px] mt-[-16px] ${mintState === 'NOT_LIVE' && 'hidden'} ${
-                      mintState === 'LIVE' && (maxVaultMint + selectedTokens.length) <= 0 && 'disabled'
+                      mintState === 'LIVE' && maxVaultMint + selectedTokens.length <= 0 && 'disabled'
                     } `}>
-                    available: {Math.min(maxVaultMint, availableSupply) + (selectedTokens.length * vaultData.mintsPerRD)}
+                    available: {Math.min(maxVaultMint, availableSupply) + selectedTokens.length * vaultData.mintsPerRD}
                   </span>
                 </div>
                 {mintState !== 'NOT_LIVE' ? (
                   <Counter
                     style={0}
-                    maxCount={Math.min(maxVaultMint, availableSupplyVL) + (selectedTokens.length * vaultData.mintsPerRD)}
+                    maxCount={Math.min(maxVaultMint, availableSupplyVL) + selectedTokens.length * vaultData.mintsPerRD}
                     count={vaultAmount}
                     setCount={setVaultAmount}
                   />
@@ -478,8 +479,7 @@ export default function Home() {
             </>
           )}
 
-          {/* Mint and price info 
-          {mintState !== 'NOT_LIVE' && (*/}
+          {/* Mint and price info */}
           {
             <>
               <div className="flex flex-col items-center mx-auto mt-[16px] relative">
@@ -528,9 +528,7 @@ export default function Home() {
         </div>
       );
     } else {
-      {
-        /* Static message display */
-      }
+      {/* Static message display */}
       return (
         <div className="flex flex-col items-center max-w-[90vw] animation">
           <Palette />
@@ -538,15 +536,38 @@ export default function Home() {
           {/* <h3 className="text-[20px] md:text-[40px] whitespace-nowrap">Congrats Dreamer!</h3> */}
           <div className="max-w-[100%] relative flex items-center text-center w-[800px]">
             <MintTotalBigBackdrop className="mx-auto" />
-            <h2 className="absolute top-[5px] w-[100%] text-[38px] md:text-[42px] text-white whitespace-nowrap mx-auto">
-              {availableSupply <= 0
-                ? 'All Sold Out!'
-                : mintState === 'PUBLIC'
-                ? 'Only two mints per wallet'
-                : vaultData.allocatedSpots > 0
-                ? 'Vault list spots used. Please try public mint'
-                : 'Please wait for Public mint to begin'}
-            </h2>
+            {availableSupply <= 0 ? (
+              <h2 className="absolute top-[5px] w-[100%] text-[38px] md:text-[42px] text-white whitespace-nowrap mx-auto">
+                All Sold Out!
+              </h2>
+            ) : mintState === 'PUBLIC' ? (
+              <h2 className="absolute top-[5px] w-[100%] text-[38px] md:text-[42px] text-white whitespace-nowrap mx-auto">
+                Only two mints per wallet
+              </h2>
+            ) : availableSupplyVL <= 0 ? (
+              <>
+                {' '}
+                <h2 className="absolute top-[5px] w-[100%] text-[38px] mt-[-12px]  md:text-[30px] text-white whitespace-nowrap mx-auto">
+                  Only guaranteed mints for ravendale holders remaining
+                </h2>
+                <h2 className="absolute top-[5px] w-[100%] text-[38px] mt-[12px] md:text-[22px] text-white whitespace-nowrap mx-auto">
+                  Please check back in a while
+                </h2>
+              </>
+            ) : maxVaultMint <= 0 && vaultData.allocatedSpots > 0 ? (
+              <>
+                <h2 className="absolute top-[5px] w-[100%] text-[38px] mt-[-12px] md:text-[30px] text-white whitespace-nowrap mx-auto">
+                  You have used all your Vault list spots
+                </h2>
+                <h2 className="absolute top-[5px] w-[100%] text-[38px] mt-[12px] md:text-[22px] text-white whitespace-nowrap mx-auto">
+                  Please check back during public mint
+                </h2>
+              </>
+            ) : (
+              <h2 className="absolute top-[5px] w-[100%] text-[38px] md:text-[40px] text-white whitespace-nowrap mx-auto">
+                Please wait for the Public mint to begin
+              </h2>
+            )}
           </div>
         </div>
       );
