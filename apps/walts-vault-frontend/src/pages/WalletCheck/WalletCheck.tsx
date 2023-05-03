@@ -6,14 +6,16 @@ import { ReactComponent as Palette } from 'assets/icons/ic-palette.svg';
 import { ReactComponent as MintErrorBackdrop } from 'assets/images/backdrops/img-mint-error-backdrop.svg';
 import { ReactComponent as MintTotalBigBackdrop } from 'assets/images/backdrops/img-mint-total-big-backdrop.svg';
 import { ReactComponent as PaintbrushBlack } from 'assets/icons/ic-paintbrush-black.svg';
+import { ReactComponent as Delimeter } from 'assets/icons/ic-delimeter.svg';
 import Menu from '../../components/Menu';
 import Footer from '../../components/Footer';
 import { useEffect, useState } from 'react';
-import { useAccount, useNetwork, useSigner, useSwitchNetwork } from 'wagmi';
+import { useAccount, useNetwork, useProvider, useSigner, useSwitchNetwork } from 'wagmi';
 
 import config from '../../web3/config.json';
 import { useWeb3Modal } from '@web3modal/react';
 import { getOrderSignature } from 'utils/backendApi';
+import { providerHandler, getRavendaleBalance } from 'web3/contractInteraction';
 
 export default function WalletCheck() {
     const { address, isConnected } = useAccount();
@@ -21,8 +23,10 @@ export default function WalletCheck() {
     const { open } = useWeb3Modal();
     const { data } = useSigner();
     const { switchNetwork } = useSwitchNetwork();
+    const provider = useProvider();
 
     const [allocatedSpots, setAllocatedSpots] = useState(0);
+    const [ravendaleTokens, setRavendaleTokens] = useState(0);
 
     const [step, setStep] = useState(0);
     const [step0Status, setStep0Status] = useState('initial'); // initial loading error completed
@@ -33,6 +37,14 @@ export default function WalletCheck() {
     const accountSetup = async () => {
         setStep(0);
         setStep0Status('loading');
+
+        if (data) {
+            console.log('Mint/accountSetup~ data: ', true);
+            await providerHandler(data, provider);
+        }
+
+        const ravendaleBalance = await getRavendaleBalance(address || '');
+        setRavendaleTokens(ravendaleBalance);
 
         const orderSignature = await getOrderSignature(address);
         setAllocatedSpots(orderSignature ? orderSignature.signature[1] : 0);
@@ -134,29 +146,48 @@ export default function WalletCheck() {
     function renderStep1() {
         return (
             <div className="flex flex-col items-center max-w-[90vw] my-14 animation">
-                {allocatedSpots > 0 ? (
+                {/* {ravendaleTokens > 0 &&
                     <>
-                        <Palette />
+                        <div
+                            className={`flex row items-center justify-between w-[75%]`}>
+                            <div className="flex flex-col">
+                                <span className="text-[42px]">Ravendale</span>
+                            </div>
+                            <span className="text-[26px]">
+                                {ravendaleTokens}
+                            </span>
+                        </div>
+                        <Delimeter
+                            className={`max-w-[100%] my-[10px]`}
+                        />
+                    </>
+                } */}
+                {(allocatedSpots || ravendaleTokens) &&
+                    <>
+                        <Palette className='my-[1rem]'/>
                         <br />
                         <div className="max-w-[100%] relative flex items-center text-center w-[600px]">
                             <MintTotalBigBackdrop className="mx-auto" />
                             <h2 className="absolute top-[5px] w-[100%] text-[38px] md:text-[44px] text-white whitespace-nowrap mx-auto">
-                                Hey, you've got {allocatedSpots} Vault List spot{allocatedSpots > 1 ? 's!' : '!'}
+                                Hey, you've got {allocatedSpots + ravendaleTokens} Vault List spot{(allocatedSpots + ravendaleTokens) > 1 ? 's!' : '!'}
                             </h2>
                         </div>
                     </>
-                ) : (
+                }
+                {(allocatedSpots === 0 && ravendaleTokens === 0) &&
                     <>
-                        <BrokenPencilBlack />
+                        {/* <BrokenPencilBlack /> */}
+                        <Palette className='my-[1rem]'/>
                         <br />
                         <div className="max-w-[100%] relative flex items-center text-center w-[600px]">
-                            <MintErrorBackdrop className="max-w-[100vw] mx-auto" />
+                            {/* <MintErrorBackdrop className="max-w-[100vw] mx-auto" /> */}
+                            <MintTotalBigBackdrop className="mx-auto" />
                             <h2 className="absolute top-[5px] w-[100%] text-[38px] md:text-[44px] text-white whitespace-nowrap mx-auto">
-                                Sorry, you are not on the Vault List
+                                You are on the FCFS list
                             </h2>
                         </div>
                     </>
-                )}
+                }
             </div>
         )
     }

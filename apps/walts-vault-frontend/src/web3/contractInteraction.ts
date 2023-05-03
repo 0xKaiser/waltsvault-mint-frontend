@@ -23,6 +23,11 @@ export const providerHandlerReadOnly = async () => {
   contract = new ethers.Contract(config.mintControllerContractAddress, abi, provider);
 };
 
+export const getRavendaleBalance =async (address: string) => {
+  const n = await ravendaleContract.balanceOf(address);
+  return n.toNumber();
+}
+
 export const getRavendaleTokens = async (address: string) => {
   try {
     const ravendaleSupply = await ravendaleContract.totalSupply().then((res: ethers.BigNumber) => {
