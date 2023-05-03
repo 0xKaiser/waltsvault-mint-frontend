@@ -15,7 +15,7 @@ import { useAccount, useNetwork, useProvider, useSigner, useSwitchNetwork } from
 import config from '../../web3/config.json';
 import { useWeb3Modal } from '@web3modal/react';
 import { getOrderSignature } from 'utils/backendApi';
-import { providerHandler, getRavendaleBalance } from 'web3/contractInteraction';
+import { providerHandler, getRavendaleBalance, getUsedResVL } from 'web3/contractInteraction';
 
 export default function WalletCheck() {
     const { address, isConnected } = useAccount();
@@ -30,9 +30,6 @@ export default function WalletCheck() {
 
     const [step, setStep] = useState(0);
     const [step0Status, setStep0Status] = useState('initial'); // initial loading error completed
-    const [step1Status, setStep1Status] = useState('initial'); // initial loading error completed
-    const [errorMessage, setErrorMessage] = useState('Hmmm, something went wrong');
-    const [successMessage, setSuccessMessage] = useState('Successfully Minted');
 
     const accountSetup = async () => {
         setStep(0);
@@ -47,7 +44,9 @@ export default function WalletCheck() {
         setRavendaleTokens(ravendaleBalance);
 
         const orderSignature = await getOrderSignature(address);
-        setAllocatedSpots(orderSignature ? orderSignature.signature[1] : 0);
+        
+        const usedVL = await getUsedResVL(address || '');
+        setAllocatedSpots(orderSignature ? (orderSignature.signature[1] - usedVL) : 0);
 
         setStep(1);
         setStep0Status('completed');
