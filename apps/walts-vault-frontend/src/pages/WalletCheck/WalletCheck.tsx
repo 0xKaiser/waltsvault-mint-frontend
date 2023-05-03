@@ -145,23 +145,7 @@ export default function WalletCheck() {
     function renderStep1() {
         return (
             <div className="flex flex-col items-center max-w-[90vw] my-14 animation">
-                {/* {ravendaleTokens > 0 &&
-                    <>
-                        <div
-                            className={`flex row items-center justify-between w-[75%]`}>
-                            <div className="flex flex-col">
-                                <span className="text-[42px]">Ravendale</span>
-                            </div>
-                            <span className="text-[26px]">
-                                {ravendaleTokens}
-                            </span>
-                        </div>
-                        <Delimeter
-                            className={`max-w-[100%] my-[10px]`}
-                        />
-                    </>
-                } */}
-                {(allocatedSpots || ravendaleTokens) &&
+                {(allocatedSpots || ravendaleTokens) ?
                     <>
                         <Palette className='my-[1rem]'/>
                         <br />
@@ -171,21 +155,19 @@ export default function WalletCheck() {
                                 Hey, you've got {allocatedSpots + ravendaleTokens} Vault List spot{(allocatedSpots + ravendaleTokens) > 1 ? 's!' : '!'}
                             </h2>
                         </div>
-                    </>
+                    </> : null
                 }
-                {(allocatedSpots === 0 && ravendaleTokens === 0) &&
+                {(allocatedSpots === 0 && ravendaleTokens === 0) ?
                     <>
-                        {/* <BrokenPencilBlack /> */}
                         <Palette className='my-[1rem]'/>
                         <br />
                         <div className="max-w-[100%] relative flex items-center text-center w-[600px]">
-                            {/* <MintErrorBackdrop className="max-w-[100vw] mx-auto" /> */}
                             <MintTotalBigBackdrop className="mx-auto" />
                             <h2 className="absolute top-[5px] w-[100%] text-[38px] md:text-[44px] text-white whitespace-nowrap mx-auto">
                                 You are on the FCFS list
                             </h2>
                         </div>
-                    </>
+                    </> : null
                 }
             </div>
         )
