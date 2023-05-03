@@ -437,7 +437,7 @@ export default function Home() {
                     className={`text-[20px] mt-[-16px] ${mintState === 'NOT_LIVE' && 'hidden'} ${
                       mintState === 'LIVE' && maxVaultMint + selectedTokens.length <= 0 && 'disabled'
                     } `}>
-                    available: {Math.min(maxVaultMint, availableSupply) + selectedTokens.length * vaultData.mintsPerRD}
+                    available: {Math.min(maxVaultMint, availableSupplyVL) + selectedTokens.length * vaultData.mintsPerRD}
                   </span>
                 </div>
                 {mintState !== 'NOT_LIVE' ? (
