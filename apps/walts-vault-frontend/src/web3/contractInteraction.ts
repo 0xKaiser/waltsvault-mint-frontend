@@ -108,6 +108,11 @@ export const getMintTime = async () => {
   return mintTimes;
 };
 
+export const isPaused = async () => {
+  const n = await contract.paused();
+  return n;
+}
+
 export const getMintsPerRD = async () => {
   const n = await contract.MAX_MINTS_PER_TOKEN_RD();
   return n;

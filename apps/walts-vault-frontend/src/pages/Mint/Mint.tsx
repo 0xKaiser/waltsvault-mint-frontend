@@ -28,6 +28,7 @@ import {
   getResSpotVL,
   getUsedResFCFS,
   getUsedResVL,
+  isPaused,
   placeOrder,
   providerHandler,
   setApproval,
@@ -51,6 +52,7 @@ export default function Home() {
   const [successMessage, setSuccessMessage] = useState('Successfully Minted');
 
   // Mint Logic States
+  const [mintPaused, setMintPaused] = useState(false);
   const [mintState, setMintState] = useState('NOT_LIVE');
   const [signature, setSignature] = useState<any>();
 
@@ -186,8 +188,8 @@ export default function Home() {
         e.code === 'INSUFFICIENT_FUNDS'
           ? 'Wallet does not have enough balance'
           : e.code === 'ACTION_REJECTED'
-          ? 'Transaction rejected'
-          : 'Hmmm, something went wrong',
+            ? 'Transaction rejected'
+            : 'Hmmm, something went wrong',
       );
 
       setStep1Status('error');
@@ -211,6 +213,9 @@ export default function Home() {
   }, [isConnected]);
 
   const checkMintState = async () => {
+    const paused = await isPaused();
+    setMintPaused(paused);
+
     const mintTimes = await getMintTime();
     const currentTime = Number(Date.now() / 1000);
 
@@ -377,6 +382,22 @@ export default function Home() {
       );
     }
 
+    if (mintPaused) {
+      return (
+        <div className="flex flex-col items-center max-w-[90vw] animation">
+          <Palette />
+          <br />
+          {/* <h3 className="text-[20px] md:text-[40px] whitespace-nowrap">Congrats Dreamer!</h3> */}
+          <div className="max-w-[100%] relative flex items-center text-center w-[800px]">
+            <MintTotalBigBackdrop className="mx-auto" />
+            <h2 className="absolute top-[5px] w-[100%] text-[38px] md:text-[42px] text-white whitespace-nowrap mx-auto">
+              Mint Paused
+            </h2>
+          </div>
+        </div>
+      )
+    }
+
     if (
       ravendaleTokens.length > 0 ||
       (availableSupply > 0 &&
@@ -402,13 +423,12 @@ export default function Home() {
                       key={token.tokenId}
                       className={`
                       w-[43px] h-[43px] flex items-center justify-center cursor-pointer
-                      ${
-                        selectedTokens.includes(token.tokenId)
+                      ${selectedTokens.includes(token.tokenId)
                           ? 'border-2 border-black'
                           : token.locked
-                          ? 'border border-gray-400 border-opacity-50'
-                          : 'border border-gray-400 '
-                      } 
+                            ? 'border border-gray-400 border-opacity-50'
+                            : 'border border-gray-400 '
+                        } 
                       ${selectedTokens.includes(token.tokenId) || token.locked ? '' : 'hover'}
                     `}
                       onClick={() => {
@@ -434,9 +454,8 @@ export default function Home() {
                 <div className="flex flex-col">
                   <span className="text-[42px]">Vault List</span>
                   <span
-                    className={`text-[20px] mt-[-16px] ${mintState === 'NOT_LIVE' && 'hidden'} ${
-                      mintState === 'LIVE' && maxVaultMint + selectedTokens.length <= 0 && 'disabled'
-                    } `}>
+                    className={`text-[20px] mt-[-16px] ${mintState === 'NOT_LIVE' && 'hidden'} ${mintState === 'LIVE' && maxVaultMint + selectedTokens.length <= 0 && 'disabled'
+                      } `}>
                     available: {Math.min(maxVaultMint, availableSupplyVL) + selectedTokens.length * vaultData.mintsPerRD}
                   </span>
                 </div>
@@ -485,15 +504,13 @@ export default function Home() {
               <div className="flex flex-col items-center mx-auto mt-[16px] relative">
                 <MintTotalBackdrop className="absolute z-0" />
                 <div
-                  className={`text-[20px] text-white leading-[47px] ${
-                    mintState === 'NOT_LIVE' && 'hidden'
-                  } mx-auto mt-[-11px] z-10`}>
+                  className={`text-[20px] text-white leading-[47px] ${mintState === 'NOT_LIVE' && 'hidden'
+                    } mx-auto mt-[-11px] z-10`}>
                   no. of mints: {selectedTokens.length + vaultAmount + FCFSAmount}
                 </div>
                 <div
-                  className={`text-[32px] text-white leading-[47px] mx-auto ${
-                    mintState === 'NOT_LIVE' ? 'mt-[0px]' : 'mt-[-27px]'
-                  } z-10`}>
+                  className={`text-[32px] text-white leading-[47px] mx-auto ${mintState === 'NOT_LIVE' ? 'mt-[0px]' : 'mt-[-27px]'
+                    } z-10`}>
                   {mintState === 'NOT_LIVE'
                     ? 'Mint starts soon'
                     : `Price: ${parseFloat(((vaultAmount + FCFSAmount) * Number(mintPrice)).toFixed(5))} eth`}
@@ -506,9 +523,8 @@ export default function Home() {
           {
             <div className="flex flex-col items-center my-8">
               <div
-                className={`flex flex-row items-center ${isApproved && mintState === 'NOT_LIVE' && 'hidden'}  ${
-                  mintState !== 'NOT_LIVE' && selectedTokens.length + vaultAmount + FCFSAmount <= 0 && 'disabled'
-                }`}>
+                className={`flex flex-row items-center ${isApproved && mintState === 'NOT_LIVE' && 'hidden'}  ${mintState !== 'NOT_LIVE' && selectedTokens.length + vaultAmount + FCFSAmount <= 0 && 'disabled'
+                  }`}>
                 <EnterDecorationBlack className={`w-[33px]`} />
                 <button className={`px-3`} type="button" onClick={mintHandler}>
                   <h1 className={`text-black text-[64px]`}>
@@ -517,8 +533,8 @@ export default function Home() {
                         ? 'Approve'
                         : 'Confirm'
                       : selectedTokens.length > 0 && !isApproved
-                      ? 'Approve & Confirm'
-                      : 'Confirm'}
+                        ? 'Approve & Confirm'
+                        : 'Confirm'}
                   </h1>
                 </button>
                 <EnterDecorationBlack className={`rotate-180 w-[33px]`} />
@@ -528,7 +544,7 @@ export default function Home() {
         </div>
       );
     } else {
-      {/* Static message display */}
+      {/* Static message display */ }
       return (
         <div className="flex flex-col items-center max-w-[90vw] animation">
           <Palette />
