@@ -178,12 +178,14 @@ export default function WalletCheck() {
                 }
                 {(allocatedSpots === 0 && ravendaleTokens === 0) &&
                     <>
-                        <BrokenPencilBlack />
+                        {/* <BrokenPencilBlack /> */}
+                        <Palette className='my-[1rem]'/>
                         <br />
                         <div className="max-w-[100%] relative flex items-center text-center w-[600px]">
-                            <MintErrorBackdrop className="max-w-[100vw] mx-auto" />
+                            {/* <MintErrorBackdrop className="max-w-[100vw] mx-auto" /> */}
+                            <MintTotalBigBackdrop className="mx-auto" />
                             <h2 className="absolute top-[5px] w-[100%] text-[38px] md:text-[44px] text-white whitespace-nowrap mx-auto">
-                                Sorry, you are not on the Vault List
+                                You are on the FCFS list
                             </h2>
                         </div>
                     </>
