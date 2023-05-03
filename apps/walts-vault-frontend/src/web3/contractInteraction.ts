@@ -3,7 +3,6 @@ import { Provider, Contract } from 'ethers-multicall';
 
 import config from './config.json';
 import abi from './mintControllerAbi.json';
-import vaultAbi from './vaultAbi.json';
 import ravendaleAbi from './ravendaleAbi.json';
 
 let ethcallProvider: Provider, contract: ethers.Contract, ravendaleContract: ethers.Contract;
@@ -23,16 +22,17 @@ export const providerHandlerReadOnly = async () => {
   contract = new ethers.Contract(config.mintControllerContractAddress, abi, provider);
 };
 
-export const getRavendaleBalance =async (address: string) => {
+export const getRavendaleBalance = async (address: string) => {
   const n = await ravendaleContract.balanceOf(address);
   return n.toNumber();
 }
 
 export const getRavendaleTokens = async (address: string) => {
   try {
-    const ravendaleSupply = await ravendaleContract.totalSupply().then((res: ethers.BigNumber) => {
-      return res.toNumber();
-    });
+    // const ravendaleSupply = await ravendaleContract.totalSupply().then((res: ethers.BigNumber) => {
+    //   return res.toNumber();
+    // });
+    const ravendaleSupply = config.ravendaleTotalSupply;
     const userBalance = await ravendaleContract.balanceOf(address).then((res: ethers.BigNumber) => {
       return res.toNumber();
     });

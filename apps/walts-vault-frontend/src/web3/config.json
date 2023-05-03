@@ -1,9 +1,9 @@
 {
-  "vaultContractAddress": "0xA6Cb33E769370646AA6AD1250A5C4F7BeFD2713B",
-  "mintControllerContractAddress": "0x8f723c1fbEDD6B7d389e2B610d947967c2CE4Ff6",
-  "ravendaleContractAddress": "0xd20466FcfE69EB409B9758871f24f94C347300F2",
-  "chainID": 5,
-  "network": "Goerli Testnet",
+  "mintControllerContractAddress": "0xf9ae821914097DFb8C23D27aA2ECfC22C279aFDc",
+  "ravendaleContractAddress": "0xf83A99E084C1D575AF8e12FF492F5E6C7b768b48",
+  "ravendaleTotalSupply": 928,
+  "chainID": 1,
+  "network": "Ethereum Mainnet",
   "PROJECT_ID": "906c2930e2f71964ff0b518b5036776f",
   "rpcProvider": "https://eth-goerli.g.alchemy.com/v2/0aQmwMwZBjX6De1lQ30jUZXlGBpuuvrX"
 }
