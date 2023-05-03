@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://waltsvault-be-new-jfmdh.ondigitalocean.app/signer/unique";
+const BASE_URL = "https://walts-vault-backend-final-cct6n.ondigitalocean.app/signer/unique";
 
 export const getOrderSignature = async (address) => {
   try {
