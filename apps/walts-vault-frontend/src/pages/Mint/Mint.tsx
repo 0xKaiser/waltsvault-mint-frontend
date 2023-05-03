@@ -138,7 +138,7 @@ export default function Home() {
 
   const getMaxVaultMint = () => {
     const totalAllocatedSpots = vaultData.allocatedSpots * vaultData.reservationPerSpot;
-    const maxMint = totalAllocatedSpots - vaultData.usedReservations;
+    const maxMint = Math.min(totalAllocatedSpots - vaultData.usedReservations, availableSupplyVL);
     console.log('Mint/getMaxVaultMint~ maxMint: ', maxMint);
 
     if (maxMint + selectedTokens.length * vaultData.mintsPerRD < vaultAmount) {
